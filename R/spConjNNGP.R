@@ -3,8 +3,10 @@ spConjNNGP <- function(formula, data = parent.frame(), coords, knots, n.neighbor
                        k.fold = 5, score.rule = "crps",
                        X.0, coords.0, 
                        n.omp.threads = 1, search.type = "cb", ord, return.neighbor.info = FALSE,  
-                       neighbor.info, fit.rep = FALSE, n.samples, verbose = TRUE, ...){
-
+                       neighbor.info, nn2.idx, fit.rep = FALSE, n.samples, verbose = TRUE, ...){
+    # BJ: changed # 
+    # default for return.neighbor.info is FALSE
+    # nn2.idx included in arguments
     
     ####################################################
     ##Check for unused args
@@ -155,9 +157,16 @@ spConjNNGP <- function(formula, data = parent.frame(), coords, knots, n.neighbor
             stop("error: either coords.0 has more than two columns or the number of rows is different than
           X.0")
         }
-
-        nn.indx.0 <- nn2(coords, coords.0, k=n.neighbors)$nn.idx-1 ##obo for cNNGP.cpp indexing
         
+        ## BJ: changed ##
+        if (neighbor.info$type == "barrier") {
+            if (missing(nn2.idx)) {
+                stop("error: nn2.idx must be specified for barrier model")
+                } else { nn.indx.0 <- nn2.idx - 1} ##obo for cNNGP.cpp indexing
+        } else {
+            nn.indx.0 <- nn2(coords, coords.0, k=n.neighbors)$nn.idx-1 ##obo for cNNGP.cpp indexing
+        }
+
     }else{
         coords.0 <- 0
         X.0 <- 0
