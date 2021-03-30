@@ -103,7 +103,8 @@ spNNGP <- function(formula, data = parent.frame(), coords, method = "response", 
     
     if(!missing(neighbor.info)){
 
-        warning("Using user defined neighbor.info. No checks are done on the supplied neighbor information.")
+        # BJ: changed # 
+        message("Using user defined neighbor.info, no checks are done on the supplied neighbor information.")
         
         if(!all(c("n.neighbors","nn.indx","nn.indx.lu","ord") %in% names(neighbor.info))){stop("The supplied neighbor.info is malformed.")}
         
