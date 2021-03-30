@@ -3,10 +3,9 @@ spConjNNGP <- function(formula, data = parent.frame(), coords, knots, n.neighbor
                        k.fold = 5, score.rule = "crps",
                        X.0, coords.0, 
                        n.omp.threads = 1, search.type = "cb", ord, return.neighbor.info = FALSE,  
-                       neighbor.info, nn2.idx, fit.rep = FALSE, n.samples, verbose = TRUE, ...){
+                       neighbor.info, fit.rep = FALSE, n.samples, verbose = TRUE, ...){
     # BJ: changed # 
     # default for return.neighbor.info is FALSE
-    # nn2.idx included in arguments
     
     ####################################################
     ##Check for unused args
@@ -162,9 +161,9 @@ spConjNNGP <- function(formula, data = parent.frame(), coords, knots, n.neighbor
         
         ## BJ: changed ##
         if (neighbor.info$type == "barrier") {
-            if (missing(nn2.idx)) {
+            if(! "nn2.idx" %in% names(elip.args)){
                 stop("error: nn2.idx must be specified for barrier model")
-                } else { nn.indx.0 <- nn2.idx - 1} ##obo for cNNGP.cpp indexing
+            } else { nn.indx.0 <- nn2.idx - 1} ##obo for cNNGP.cpp indexing
         } else {
             nn.indx.0 <- nn2(coords, coords.0, k=n.neighbors)$nn.idx-1 ##obo for cNNGP.cpp indexing
         }

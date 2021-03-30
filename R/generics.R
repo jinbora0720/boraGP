@@ -529,7 +529,7 @@ print.spDiag <- function(x, ...){
 
 }
 
-predict.NNGP <- function(object, X.0, coords.0, nn2.idx, sub.sample, n.omp.threads = 1, verbose=TRUE, n.report=100, ...){
+predict.NNGP <- function(object, X.0, coords.0, sub.sample, n.omp.threads = 1, verbose=TRUE, n.report=100, ...){
     ####################################################
     ##Check for unused args
     ####################################################
@@ -641,7 +641,7 @@ predict.NNGP <- function(object, X.0, coords.0, nn2.idx, sub.sample, n.omp.threa
         
         ##get nn indx
         ## BJ: changed ##
-        if (!missing(nn2.idx)) {
+        if("nn2.idx" %in% names(elip.args)){
           nn.indx.0 <- nn2.idx - 1
         } else { nn.indx.0 <- nn2(coords, coords.0, k=n.neighbors)$nn.idx-1} ##obo for cNNGP.cpp indexing
 
