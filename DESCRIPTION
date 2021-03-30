@@ -1,4 +1,4 @@
-Package: Barrier_NNGP
+Package: baNNGP
 Title: Spatial Regression Models for Large Datasets using Nearest
         Neighbor Gaussian Processes Respecting Intrinsic Geometry of Data Domain
 Version: 0.0.1
