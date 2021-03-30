@@ -2,7 +2,7 @@ spConjNNGP <- function(formula, data = parent.frame(), coords, knots, n.neighbor
                        theta.alpha, sigma.sq.IG, cov.model = "exponential",
                        k.fold = 5, score.rule = "crps",
                        X.0, coords.0, 
-                       n.omp.threads = 1, search.type = "cb", ord, return.neighbor.info = TRUE,  
+                       n.omp.threads = 1, search.type = "cb", ord, return.neighbor.info = FALSE,  
                        neighbor.info, fit.rep = FALSE, n.samples, verbose = TRUE, ...){
 
     
@@ -98,7 +98,8 @@ spConjNNGP <- function(formula, data = parent.frame(), coords, knots, n.neighbor
         n.neighbors <- neighbor.info$n.neighbors
         neighbor.info.provided <- TRUE
         
-        warning("Using user defined neighbor.info, no checks are done on the supplied neighbor information.")
+        # BJ: changed # 
+        message("Using user defined neighbor.info, no checks are done on the supplied neighbor information.")
         
     }else{
         
