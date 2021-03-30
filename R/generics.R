@@ -530,14 +530,12 @@ print.spDiag <- function(x, ...){
 }
 
 predict.NNGP <- function(object, X.0, coords.0, nn2.idx, sub.sample, n.omp.threads = 1, verbose=TRUE, n.report=100, ...){
-  
-  ## BJ: changed ##
-  # nn2.idx included in arguments
-  
     ####################################################
     ##Check for unused args
     ####################################################
-    formal.args <- names(formals(sys.function(sys.parent())))
+    ## BJ: changed ##
+    # nn2.idx included in arguments
+    formal.args <- c(names(formals(sys.function(sys.parent()))), "nn2.idx")
 
     elip.args <- list(...)
     for(i in names(elip.args)){

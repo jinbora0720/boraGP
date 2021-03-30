@@ -11,7 +11,9 @@ spConjNNGP <- function(formula, data = parent.frame(), coords, knots, n.neighbor
     ####################################################
     ##Check for unused args
     ####################################################
-    formal.args <- c(names(formals(sys.function(sys.parent()))), "n.report")
+    # BJ: changed # 
+    # nn2.idx included in arguments
+    formal.args <- c(names(formals(sys.function(sys.parent()))), "n.report", "nn2.idx")
     
     elip.args <- list(...)
     for(i in names(elip.args)){
