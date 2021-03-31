@@ -5,7 +5,7 @@ spConjNNGP <- function(formula, data = parent.frame(), coords, knots, n.neighbor
                        n.omp.threads = 1, search.type = "cb", ord, return.neighbor.info = TRUE,  
                        neighbor.info, nn.indx.0 = NULL, fit.rep = FALSE, n.samples, verbose = TRUE, ...){
 
-    # BJ: changed # 
+    ## BJ: changed ##
     # nn.indx.0 = NULL included in arguments
     
     ####################################################
@@ -100,7 +100,7 @@ spConjNNGP <- function(formula, data = parent.frame(), coords, knots, n.neighbor
         n.neighbors <- neighbor.info$n.neighbors
         neighbor.info.provided <- TRUE
         
-        # BJ: changed # 
+        ## BJ: changed ##
         message("Using user defined neighbor.info, no checks are done on the supplied neighbor information.")
         
     }else{
