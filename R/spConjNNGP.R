@@ -2,17 +2,16 @@ spConjNNGP <- function(formula, data = parent.frame(), coords, knots, n.neighbor
                        theta.alpha, sigma.sq.IG, cov.model = "exponential",
                        k.fold = 5, score.rule = "crps",
                        X.0, coords.0, 
-                       n.omp.threads = 1, search.type = "cb", ord, return.neighbor.info = FALSE,  
-                       neighbor.info, fit.rep = FALSE, n.samples, verbose = TRUE, ...){
+                       n.omp.threads = 1, search.type = "cb", ord, return.neighbor.info = TRUE,  
+                       neighbor.info, nn.indx.0 = NULL, fit.rep = FALSE, n.samples, verbose = TRUE, ...){
+
     # BJ: changed # 
-    # default for return.neighbor.info is FALSE
+    # nn.indx.0 = NULL included in arguments
     
     ####################################################
     ##Check for unused args
     ####################################################
-    # BJ: changed # 
-    # nn2.idx included in arguments
-    formal.args <- c(names(formals(sys.function(sys.parent()))), "n.report", "nn2.idx")
+    formal.args <- c(names(formals(sys.function(sys.parent()))), "n.report")
     
     elip.args <- list(...)
     for(i in names(elip.args)){
@@ -147,9 +146,9 @@ spConjNNGP <- function(formula, data = parent.frame(), coords, knots, n.neighbor
     ####################################################
     ##Prediction data
     ####################################################
-    n.0 <- 0 ##if n.0 is zero in cNNGP.cpp then no prediction occurs
-    nn.indx.0 <- 0
     
+    ## BJ: changed ##
+    ## if X.0 is missing the no prediction occurs
     if(!missing(X.0)){
         if(!is.matrix(X.0) || ncol(X.0) != p){stop(paste("error: X.0 must n.0-by-",p," matrix", sep=""))}
         n.0 <- nrow(X.0)
@@ -160,15 +159,21 @@ spConjNNGP <- function(formula, data = parent.frame(), coords, knots, n.neighbor
         }
         
         ## BJ: changed ##
-        if (neighbor.info$type == "barrier") {
-            if(! "nn2.idx" %in% names(elip.args)){
-                stop("error: nn2.idx must be specified for barrier model")
-            } else { nn.indx.0 <- nn2.idx - 1} ##obo for cNNGP.cpp indexing
+        if (neighbor.info.provided) {
+            if (is.null(nn.indx.0)) {
+                if (neighbor.info$type == "barrier") {
+                    stop("error: nn.indx.0 must be specified for barrier model")
+                } else { 
+                    nn.indx.0 <- nn2(coords, coords.0, k=n.neighbors)$nn.idx-1 ##obo for cNNGP.cpp indexing
+                }
+            } else { nn.indx.0 <- nn.indx.0 - 1} ##obo for cNNGP.cpp indexing
         } else {
             nn.indx.0 <- nn2(coords, coords.0, k=n.neighbors)$nn.idx-1 ##obo for cNNGP.cpp indexing
         }
 
     }else{
+        n.0 <- 0 ##if n.0 is zero in cNNGP.cpp then no prediction occurs
+        nn.indx.0 <- 0
         coords.0 <- 0
         X.0 <- 0
     }
@@ -424,10 +429,16 @@ spConjNNGP <- function(formula, data = parent.frame(), coords, knots, n.neighbor
         out$k.fold.scores <- k.fold.scores
     }
 
+    ## BJ: changed ##
     if(return.neighbor.info){
-        out$neighbor.info <- list(n.neighbors = n.neighbors, n.indx=mk.n.indx.list(nn.indx, n, n.neighbors),
-                                  nn.indx=nn.indx, nn.indx.lu=nn.indx.lu, ord=ord,
-                                  nn.indx.run.time=nn.indx.run.time)
+        if (neighbor.info.provided) {
+            out$neighbor.info <- list(n.neighbors = n.neighbors, n.indx=mk.n.indx.list(nn.indx, n, n.neighbors),
+                                      nn.indx=nn.indx, nn.indx.lu=nn.indx.lu, ord=ord)
+        } else {
+            out$neighbor.info <- list(n.neighbors = n.neighbors, n.indx=mk.n.indx.list(nn.indx, n, n.neighbors),
+                                      nn.indx=nn.indx, nn.indx.lu=nn.indx.lu, ord=ord,
+                                      nn.indx.run.time=nn.indx.run.time)
+        }
     }
 
     ##do exact sampling and fit and replicated data if requested

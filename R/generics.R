@@ -529,13 +529,13 @@ print.spDiag <- function(x, ...){
 
 }
 
-predict.NNGP <- function(object, X.0, coords.0, sub.sample, n.omp.threads = 1, verbose=TRUE, n.report=100, ...){
+predict.NNGP <- function(object, X.0, coords.0, nn.indx.0 = NULL, sub.sample, n.omp.threads = 1, verbose=TRUE, n.report=100, ...){
     ####################################################
     ##Check for unused args
     ####################################################
     ## BJ: changed ##
-    # nn2.idx included in arguments
-    formal.args <- c(names(formals(sys.function(sys.parent()))), "nn2.idx")
+    # nn.indx.0 = NULL included in arguments
+    formal.args <- names(formals(sys.function(sys.parent())))
 
     elip.args <- list(...)
     for(i in names(elip.args)){
@@ -641,8 +641,8 @@ predict.NNGP <- function(object, X.0, coords.0, sub.sample, n.omp.threads = 1, v
         
         ##get nn indx
         ## BJ: changed ##
-        if("nn2.idx" %in% names(elip.args)){
-          nn.indx.0 <- nn2.idx - 1
+        if(!is.null(nn.indx.0)){
+          nn.indx.0 <- nn.indx.0 - 1
         } else { nn.indx.0 <- nn2(coords, coords.0, k=n.neighbors)$nn.idx-1} ##obo for cNNGP.cpp indexing
 
         storage.mode(X) <- "double"

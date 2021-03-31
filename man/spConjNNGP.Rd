@@ -13,8 +13,9 @@
                theta.alpha, sigma.sq.IG, cov.model = "exponential",
                k.fold = 5, score.rule = "crps",
                X.0, coords.0, n.omp.threads = 1, search.type = "cb",
-               ord, return.neighbor.info = TRUE, 
-               neighbor.info, fit.rep = FALSE, n.samples, verbose = TRUE, ...)
+               ord, return.neighbor.info = TRUE,
+               neighbor.info, nn.indx.0 = NULL,  %% BJ: changed %%
+               fit.rep = FALSE, n.samples, verbose = TRUE, ...)
 }
 
 \arguments{
@@ -88,6 +89,9 @@
     \item{coords.0}{the spatial coordinates corresponding to
       \code{X.0}. }
     
+    %% BJ: changed %%
+    \item{nn.indx.0}{user-specified nearest neighbor index}
+      
     \item{n.omp.threads}{a positive integer indicating
       the number of threads to use for SMP parallel processing. The package must
       be compiled for OpenMP support. For most Intel-based machines, we recommend setting
@@ -205,6 +209,7 @@
 }
 
 \author{
+  Bora Jin \email{bora.jin@duke.edu}, \cr
   Andrew O. Finley \email{finleya@msu.edu}, \cr
   Abhirup Datta \email{abhidatta@jhu.edu}, \cr
   Sudipto Banerjee \email{sudipto@ucla.edu}

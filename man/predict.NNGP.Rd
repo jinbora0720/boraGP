@@ -11,8 +11,8 @@
 }
 
 \usage{
-\method{predict}{NNGP}(object, X.0, coords.0, sub.sample,
-        n.omp.threads = 1, verbose=TRUE, n.report=100, ...)
+\method{predict}{NNGP}(object, X.0, coords.0, nn.indx.0 = NULL,  %% BJ: changed %%
+        sub.sample, n.omp.threads = 1, verbose=TRUE, n.report=100, ...)
 }
 
 \arguments{
@@ -22,6 +22,8 @@
     in \code{sp.obj} model.}
   \item{coords.0}{the spatial coordinates corresponding to
     \code{X.0}. }
+  %% BJ: changed %%
+  \item{nn.indx.0}{user-specified nearest neighbor index}
   \item{sub.sample}{an optional list that specifies the samples to included in
     the composition sampling a non-Conjugate model. Valid tags are \code{start},
     \code{end}, and \code{thin}. Given the value associated with the tags,
@@ -66,6 +68,7 @@
 }
 
 \author{
+  Bora Jin \email{bora.jin@duke.edu}, \cr
   Andrew O. Finley \email{finleya@msu.edu}, \cr
   Abhirup Datta \email{abhidatta@jhu.edu}, \cr
   Sudipto Banerjee \email{sudipto@ucla.edu}
@@ -143,17 +146,18 @@ p.r <- predict(m.r, X.0 = x.ho, coords.0 = coords.ho, n.omp.threads=1)
 
 points(apply(p.r$p.y.0, 1, mean), y.ho, pch=19, col="blue")
 
-##Conjugate
-theta.alpha <- c(phi, tau.sq/sigma.sq)
-names(theta.alpha) <- c("phi", "alpha")
+%% BJ: changed %%
+% ##Conjugate
+% theta.alpha <- c(phi, tau.sq/sigma.sq)
+% names(theta.alpha) <- c("phi", "alpha")
 
-m.c <- spConjNNGP(y~x-1, coords=coords, n.neighbors=10,
-                  theta.alpha=theta.alpha, sigma.sq.IG=c(2, sigma.sq),
-                  cov.model=cov.model, n.omp.threads=1)
+% m.c <- spConjNNGP(y~x-1, coords=coords, n.neighbors=10,
+%                   theta.alpha=theta.alpha, sigma.sq.IG=c(2, sigma.sq),
+%                   cov.model=cov.model, n.omp.threads=1)
 
-p.c <- predict(m.c, X.0 = x.ho, coords.0 = coords.ho, n.omp.threads=1)
+% p.c <- predict(m.c, X.0 = x.ho, coords.0 = coords.ho, n.omp.threads=1)
 
-points(p.c$y.0.hat, y.ho, pch=19, col="orange")
+% points(p.c$y.0.hat, y.ho, pch=19, col="orange")
 
 }
 
