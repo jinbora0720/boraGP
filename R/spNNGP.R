@@ -119,7 +119,7 @@ spNNGP <- function(formula, data = parent.frame(), coords, method = "response", 
             geodist <- FALSE
         } else {
             if (geodist) {
-                distvec <- neighbor.info$distvet
+                distvec <- neighbor.info$distvec
                 if(is.null(distvec)){stop("error: geodesic distance vector must be specified")}
             }
         }
