@@ -414,7 +414,7 @@ spNNGP <- function(formula, data = parent.frame(), coords, method = "response", 
         if(method == "response"){
             ## BJ: changed ## 
             if (geodist) {
-                out <- .Call("rNNGP_geo", y, X, p, n, n.neighbors, coords, cov.model.indx, nn.indx, nn.indx.lu, 
+                out <- .Call("rNNGPgeo", y, X, p, n, n.neighbors, coords, cov.model.indx, nn.indx, nn.indx.lu, 
                              sigma.sq.IG, tau.sq.IG, phi.Unif, nu.Unif, 
                              beta.starting, sigma.sq.starting, tau.sq.starting, phi.starting, nu.starting,
                              sigma.sq.tuning, tau.sq.tuning, phi.tuning, nu.tuning,
