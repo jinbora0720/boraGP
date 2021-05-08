@@ -605,6 +605,17 @@ predict.NNGP <- function(object, X.0, coords.0, nn.indx.0 = NULL, sub.sample, n.
         n.neighbors <- object$n.neighbors
         cov.model.indx <- object$cov.model.indx
         
+        ## BJ: changed ## 
+        geodist <- object$neighbor.info$geodist
+        if (is.null(geodist)) geodist <- FALSE
+        if (geodist) {
+            nn.indx <- object$neighbor.info$nn.indx
+            nn.indx.lu <- object$neighbor.info$nn.indx.lu
+            distvec <- object$neighbor.info$distvec
+            distvec0 <- object$neighbor.info$distvec0
+            order_ord <- order(object$neighbor.info$ord)
+        }
+        
         ##subsamples
         if(missing(sub.sample)){
             sub.sample <- list()
@@ -668,6 +679,13 @@ predict.NNGP <- function(object, X.0, coords.0, nn.indx.0 = NULL, sub.sample, n.
         storage.mode(n.report) <- "integer"
         storage.mode(family.indx) <- "integer"
         
+        if (geodist) {
+            storage.mode(nn.indx) <- "integer"
+            storage.mode(nn.indx.lu) <- "integer"
+            storage.mode(distvec) <- "double"
+            storage.mode(distvec0) <- "double"
+            storage.mode(order_ord) <- "integer"
+        }
         ptm <- proc.time()
         
         ##if(class(object)[2] == "latent"){
@@ -675,8 +693,14 @@ predict.NNGP <- function(object, X.0, coords.0, nn.indx.0 = NULL, sub.sample, n.
             out <- c(out, .Call("sNNGPPredict", X, y, coords, n, p, n.neighbors, X.0, coords.0, q, nn.indx.0, 
                                 p.beta.samples, p.theta.samples, p.w.samples, n.samples, family.indx, cov.model.indx, n.omp.threads, verbose, n.report))
         }else{
-            out <- c(out, .Call("rNNGPPredict", X, y, coords, n, p, n.neighbors, X.0, coords.0, q, nn.indx.0, 
-                                p.beta.samples, p.theta.samples, n.samples, cov.model.indx, n.omp.threads, verbose, n.report))
+            if (geodist) {
+                out <- c(out, .Call("rNNGPPredict_geo", X, y, coords, n, p, n.neighbors, X.0, coords.0, q, nn.indx.0, 
+                                    p.beta.samples, p.theta.samples, n.samples, cov.model.indx, n.omp.threads, verbose, n.report, 
+                                    distvec0, nn.indx, nn.indx.lu, distvec, order_ord))
+            } else {
+                out <- c(out, .Call("rNNGPPredict", X, y, coords, n, p, n.neighbors, X.0, coords.0, q, nn.indx.0, 
+                                    p.beta.samples, p.theta.samples, n.samples, cov.model.indx, n.omp.threads, verbose, n.report))
+            }
         }
         
         out$run.time <- proc.time() - ptm

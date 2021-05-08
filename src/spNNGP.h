@@ -6,7 +6,14 @@ extern "C" {
 	     SEXP sigmaSqIG_r, SEXP tauSqIG_r, SEXP phiUnif_r, SEXP nuUnif_r, 
 	     SEXP betaStarting_r, SEXP sigmaSqStarting_r, SEXP tauSqStarting_r, SEXP phiStarting_r, SEXP nuStarting_r,
 	     SEXP sigmaSqTuning_r, SEXP tauSqTuning_r, SEXP phiTuning_r, SEXP nuTuning_r, 
-	     SEXP nSamples_r, SEXP nThreads_r, SEXP verbose_r, SEXP nReport_r, SEXP nRep_r, SEXP repIndx_r);
+	     SEXP nSamples_r, SEXP nThreads_r, SEXP verbose_r, SEXP nReport_r, SEXP nRep_r, SEXP repIndx_r); 
+  
+  SEXP rNNGP_geo(SEXP y_r, SEXP X_r, SEXP p_r, SEXP n_r, SEXP m_r, SEXP coords_r, SEXP covModel_r, SEXP nnIndx_r, SEXP nnIndxLU_r,
+             SEXP sigmaSqIG_r, SEXP tauSqIG_r, SEXP phiUnif_r, SEXP nuUnif_r, 
+             SEXP betaStarting_r, SEXP sigmaSqStarting_r, SEXP tauSqStarting_r, SEXP phiStarting_r, SEXP nuStarting_r,
+             SEXP sigmaSqTuning_r, SEXP tauSqTuning_r, SEXP phiTuning_r, SEXP nuTuning_r, 
+             SEXP nSamples_r, SEXP nThreads_r, SEXP verbose_r, SEXP nReport_r, SEXP nRep_r, SEXP repIndx_r, 
+             SEXP distvec_r); // BJ: changed //
   
   SEXP sNNGP(SEXP y_r, SEXP X_r, SEXP p_r, SEXP n_r, SEXP m_r, SEXP coords_r, SEXP covModel_r, SEXP nnIndx_r, SEXP nnIndxLU_r, SEXP uIndx_r, SEXP uIndxLU_r, SEXP uiIndx_r,
 	     SEXP sigmaSqIG_r, SEXP tauSqIG_r, SEXP phiUnif_r, SEXP nuUnif_r, 
@@ -29,8 +36,12 @@ extern "C" {
 		  SEXP nSamples_r, SEXP nThreads_r, SEXP verbose_r, SEXP nReport_r);
   
   SEXP rNNGPPredict(SEXP X_r, SEXP y_r, SEXP coords_r, SEXP n_r, SEXP p_r, SEXP m_r, SEXP X0_r, SEXP coords0_r, SEXP q_r, SEXP nnIndx0_r, 
-		    SEXP betaSamples_r, SEXP thetaSamples_r, SEXP nSamples_r, SEXP covModel_r, SEXP nThreads_r, SEXP verbose_r, SEXP nReport_r);
+		    SEXP betaSamples_r, SEXP thetaSamples_r, SEXP nSamples_r, SEXP covModel_r, SEXP nThreads_r, SEXP verbose_r, SEXP nReport_r); 
   
+  SEXP rNNGPPredict_geo(SEXP X_r, SEXP y_r, SEXP coords_r, SEXP n_r, SEXP p_r, SEXP m_r, SEXP X0_r, SEXP coords0_r, SEXP q_r, SEXP nnIndx0_r, 
+                        SEXP betaSamples_r, SEXP thetaSamples_r, SEXP nSamples_r, SEXP covModel_r, SEXP nThreads_r, SEXP verbose_r, SEXP nReport_r, 
+                        SEXP distvec0_r, SEXP nnIndx_r, SEXP nnIndxLU_r, SEXP distvec_r, SEXP order_ord_r); // BJ: changed // 
+    
   SEXP sNNGPPredict(SEXP X_r, SEXP y_r, SEXP coords_r, SEXP n_r, SEXP p_r, SEXP m_r, SEXP X0_r, SEXP coords0_r, SEXP q_r, SEXP nnIndx0_r, 
 		    SEXP betaSamples_r, SEXP thetaSamples_r, SEXP wSamples_r, SEXP nSamples_r, SEXP family_r, SEXP covModel_r, SEXP nThreads_r, SEXP verbose_r, SEXP nReport_r);
 
