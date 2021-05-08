@@ -12,7 +12,7 @@
 #endif
 
 //Description: update replicated data.
-void updateRep(double *B, double *F, int n, double *tmp_m, double *tmp_n, int *nnIndx, int *nnIndxLU){
+void updateRepgeo(double *B, double *F, int n, double *tmp_m, double *tmp_n, int *nnIndx, int *nnIndxLU){
   
   char const *ntran = "N";
   int inc = 1;
@@ -32,7 +32,6 @@ void updateRep(double *B, double *F, int n, double *tmp_m, double *tmp_n, int *n
   }
   
 }
-
 
 //Description: update B and F using pre-computed geodesic distance
 double updateBFgeo(double *B, double *F, double *c, double *C, double *coords, int *nnIndx, int *nnIndxLU, 
@@ -332,7 +331,7 @@ extern "C" {
       
       //update rep
       if(nRep && repIndx[s]){
-        updateRep(B, F, n, tmp_m, tmp_n2, nnIndx, nnIndxLU);//tmp_n is tilde{z}
+        updateRepgeo(B, F, n, tmp_m, tmp_n2, nnIndx, nnIndxLU);//tmp_n is tilde{z}
         F77_NAME(daxpy)(&n, &one, tmp_n2, &inc, &REAL(repSamples_r)[repCnt*n], &inc);
         repCnt++;
       }
