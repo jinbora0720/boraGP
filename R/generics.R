@@ -694,7 +694,7 @@ predict.NNGP <- function(object, X.0, coords.0, nn.indx.0 = NULL, sub.sample, n.
                                 p.beta.samples, p.theta.samples, p.w.samples, n.samples, family.indx, cov.model.indx, n.omp.threads, verbose, n.report))
         }else{
             if (geodist) {
-                out <- c(out, .Call("rNNGPPredict_geo", X, y, coords, n, p, n.neighbors, X.0, coords.0, q, nn.indx.0, 
+                out <- c(out, .Call("rNNGPPredictgeo", X, y, coords, n, p, n.neighbors, X.0, coords.0, q, nn.indx.0, 
                                     p.beta.samples, p.theta.samples, n.samples, cov.model.indx, n.omp.threads, verbose, n.report, 
                                     distvec0, nn.indx, nn.indx.lu, distvec, order_ord))
             } else {
