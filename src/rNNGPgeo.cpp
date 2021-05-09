@@ -39,7 +39,7 @@ double updateBFgeo(double *B, double *F, double *c, double *C, double *coords, i
                    int covModel, double *bk, double nuUnifb, 
                    double *distvec){ // BJ: changed // 
   
-  int i, k, l, h; // BJ: changed // 
+  int i, k, l, t; // BJ: changed // 
   int info = 0;
   int inc = 1;
   double one = 1.0;
@@ -77,15 +77,15 @@ double updateBFgeo(double *B, double *F, double *c, double *C, double *coords, i
           ln = nnIndx[nnIndxLU[i]+l]; // BJ: s_i's lth neighbor
           e = 0.0;
           if (kn < ln) {
-            for (h = 0; h < nnIndxLU[n+ln]; h++) {
-              if (nnIndx[nnIndxLU[ln]+h] == kn) {
-                e = distvec[nnIndxLU[ln]+h];
+            for (t = 0; t < nnIndxLU[n+ln]; t++) {
+              if (nnIndx[nnIndxLU[ln]+t] == kn) {
+                e = distvec[nnIndxLU[ln]+t];
               }
             }
           } else {
-            for (h = 0; h < nnIndxLU[n+kn]; h++) {
-              if (nnIndx[nnIndxLU[kn]+h] == ln) {
-                e = distvec[nnIndxLU[kn]+h];
+            for (t = 0; t < nnIndxLU[n+kn]; t++) {
+              if (nnIndx[nnIndxLU[kn]+t] == ln) {
+                e = distvec[nnIndxLU[kn]+t];
               }
             }
           }
@@ -125,7 +125,7 @@ extern "C" {
                 SEXP nSamples_r, SEXP nThreads_r, SEXP verbose_r, SEXP nReport_r, SEXP nRep_r, SEXP repIndx_r, 
                 SEXP distvec_r){ // BJ: changed // 
     
-    int h, i, j, k, l, s, info, nProtect=0;
+    int t, h, i, j, k, l, s, info, nProtect=0;
     const int inc = 1;
     const double one = 1.0;
     const double negOne = -1.0;
