@@ -83,13 +83,13 @@ double updateBFgeo(double *B, double *F, double *c, double *C, double *coords, i
               }
             }
           }
-          if (kn > ln) {
-            for (t = 0; t < nnIndxLU[n+kn]; t++) {
-              if (nnIndx[nnIndxLU[kn]+t] == ln) {
-                e = distvec[nnIndxLU[kn]+t];
-              }
-            }
-          }
+          // if (kn > ln) {
+          //   for (t = 0; t < nnIndxLU[n+kn]; t++) {
+          //     if (nnIndx[nnIndxLU[kn]+t] == ln) {
+          //       e = distvec[nnIndxLU[kn]+t];
+          //     }
+          //   }
+          // }
           if (e == 0.0) {
             e = dist2(coords[nnIndx[nnIndxLU[i]+k]], coords[n+nnIndx[nnIndxLU[i]+k]], coords[nnIndx[nnIndxLU[i]+l]], coords[n+nnIndx[nnIndxLU[i]+l]]);
           }
