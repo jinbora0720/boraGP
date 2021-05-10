@@ -72,24 +72,24 @@ double updateBFgeo(double *B, double *F, double *c, double *C, double *coords, i
       for(k = 0; k < nnIndxLU[n+i]; k++){
         e = distvec[nnIndxLU[i]+k];
         c[m*threadID+k] = theta[sigmaSqIndx]*spCor(e, theta[phiIndx], nu, covModel, &bk[threadID*nb]);
+        kn = nnIndx[nnIndxLU[i]+k]; // BJ: s_i's kth neighbor
         for(l = 0; l <= k; l++){
-          kn = nnIndx[nnIndxLU[i]+k]; // BJ: s_i's kth neighbor
           ln = nnIndx[nnIndxLU[i]+l]; // BJ: s_i's lth neighbor
           e = 0.0;
-          // if (kn < ln) {
+          // if (kn < ln) { // BJ: error 
           //   for (t = 0; t < nnIndxLU[n+ln]; t++) {
           //     if (nnIndx[nnIndxLU[ln]+t] == kn) {
           //       e = distvec[nnIndxLU[ln]+t];
           //     }
           //   }
           // }
-          // if (kn > ln) {
-          //   for (t = 0; t < nnIndxLU[n+kn]; t++) {
-          //     if (nnIndx[nnIndxLU[kn]+t] == ln) {
-          //       e = distvec[nnIndxLU[kn]+t];
-          //     }
-          //   }
-          // }
+          if (kn > ln) { // BJ: crash
+            for (t = 0; t < nnIndxLU[n+kn]; t++) {
+              if (nnIndx[nnIndxLU[kn]+t] == ln) {
+                e = distvec[nnIndxLU[kn]+t];
+              }
+            }
+          }
           if (e == 0.0) {
             e = dist2(coords[nnIndx[nnIndxLU[i]+k]], coords[n+nnIndx[nnIndxLU[i]+k]], coords[nnIndx[nnIndxLU[i]+l]], coords[n+nnIndx[nnIndxLU[i]+l]]);
           }
