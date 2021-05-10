@@ -161,25 +161,25 @@ extern "C" {
           d = distvec0[i+q*k];
           c[threadID*m+k] = sigmaSq*spCor(d, phi, nu, covModel, &bk[threadID*nb]);
           for(l = 0; l < m; l++){
-            kn = order_ord[nnIndx0[i+q*k]]; // BJ: u_i's kth neighbor in ordering
-            ln = order_ord[nnIndx0[i+q*l]]; // BJ: u_i's lth neighbor in ordering
-            d = 0.0;
-            if (kn < ln) {
-              for (h = 0; h < nnIndxLU[n+ln]; h++) {
-                if (nnIndx[nnIndxLU[ln]+h] == kn) {
-                  d = distvec[nnIndxLU[ln]+h];
-                }
-              }
-            } else {
-              for (h = 0; h < nnIndxLU[n+kn]; h++) {
-                if (nnIndx[nnIndxLU[kn]+h] == ln) {
-                  d = distvec[nnIndxLU[kn]+h];
-                }
-              }
-            }
-            if (d == 0.0) {
+            // kn = order_ord[nnIndx0[i+q*k]]; // BJ: u_i's kth neighbor in ordering
+            // ln = order_ord[nnIndx0[i+q*l]]; // BJ: u_i's lth neighbor in ordering
+            // d = 0.0;
+            // if (kn < ln) {
+            //   for (h = 0; h < nnIndxLU[n+ln]; h++) {
+            //     if (nnIndx[nnIndxLU[ln]+h] == kn) {
+            //       d = distvec[nnIndxLU[ln]+h];
+            //     }
+            //   }
+            // } else {
+            //   for (h = 0; h < nnIndxLU[n+kn]; h++) {
+            //     if (nnIndx[nnIndxLU[kn]+h] == ln) {
+            //       d = distvec[nnIndxLU[kn]+h];
+            //     }
+            //   }
+            // }
+            // if (d == 0.0) {
               d = dist2(coords[nnIndx0[i+q*k]], coords[n+nnIndx0[i+q*k]], coords[nnIndx0[i+q*l]], coords[n+nnIndx0[i+q*l]]);
-            }
+            // }
             C[threadID*mm+l*m+k] = sigmaSq*spCor(d, phi, nu, covModel, &bk[threadID*nb]);
             if(k == l){
               C[threadID*mm+l*m+k] += tauSq;
