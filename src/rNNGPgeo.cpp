@@ -76,13 +76,13 @@ double updateBFgeo(double *B, double *F, double *c, double *C, double *coords, i
           kn = nnIndx[nnIndxLU[i]+k]; // BJ: s_i's kth neighbor
           ln = nnIndx[nnIndxLU[i]+l]; // BJ: s_i's lth neighbor
           e = 0.0;
-          if (kn < ln) {
-            for (t = 0; t < nnIndxLU[n+ln]; t++) {
-              if (nnIndx[nnIndxLU[ln]+t] == kn) {
-                e = distvec[nnIndxLU[ln]+t];
-              }
-            }
-          }
+          // if (kn < ln) {
+          //   for (t = 0; t < nnIndxLU[n+ln]; t++) {
+          //     if (nnIndx[nnIndxLU[ln]+t] == kn) {
+          //       e = distvec[nnIndxLU[ln]+t];
+          //     }
+          //   }
+          // }
           // if (kn > ln) {
           //   for (t = 0; t < nnIndxLU[n+kn]; t++) {
           //     if (nnIndx[nnIndxLU[kn]+t] == ln) {
