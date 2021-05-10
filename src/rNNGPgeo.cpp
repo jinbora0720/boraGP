@@ -73,25 +73,25 @@ double updateBFgeo(double *B, double *F, double *c, double *C, double *coords, i
         e = distvec[nnIndxLU[i]+k];
         c[m*threadID+k] = theta[sigmaSqIndx]*spCor(e, theta[phiIndx], nu, covModel, &bk[threadID*nb]);
         for(l = 0; l <= k; l++){
-          kn = nnIndx[nnIndxLU[i]+k]; // BJ: s_i's kth neighbor
-          ln = nnIndx[nnIndxLU[i]+l]; // BJ: s_i's lth neighbor
-          e = 0.0;
-          if (kn < ln) {
-            for (t = 0; t < nnIndxLU[n+ln]; t++) {
-              if (nnIndx[nnIndxLU[ln]+t] == kn) {
-                e = distvec[nnIndxLU[ln]+t];
-              }
-            }
-          } else {
-            for (t = 0; t < nnIndxLU[n+kn]; t++) {
-              if (nnIndx[nnIndxLU[kn]+t] == ln) {
-                e = distvec[nnIndxLU[kn]+t];
-              }
-            }
-          }
-          if (e == 0.0) {
+        //   kn = nnIndx[nnIndxLU[i]+k]; // BJ: s_i's kth neighbor
+        //   ln = nnIndx[nnIndxLU[i]+l]; // BJ: s_i's lth neighbor
+        //   e = 0.0;
+        //   if (kn < ln) {
+        //     for (t = 0; t < nnIndxLU[n+ln]; t++) {
+        //       if (nnIndx[nnIndxLU[ln]+t] == kn) {
+        //         e = distvec[nnIndxLU[ln]+t];
+        //       }
+        //     }
+        //   } else {
+        //     for (t = 0; t < nnIndxLU[n+kn]; t++) {
+        //       if (nnIndx[nnIndxLU[kn]+t] == ln) {
+        //         e = distvec[nnIndxLU[kn]+t];
+        //       }
+        //     }
+        //   }
+        //   if (e == 0.0) {
             e = dist2(coords[nnIndx[nnIndxLU[i]+k]], coords[n+nnIndx[nnIndxLU[i]+k]], coords[nnIndx[nnIndxLU[i]+l]], coords[n+nnIndx[nnIndxLU[i]+l]]);
-          }
+          // }
           C[mm*threadID+l*nnIndxLU[n+i]+k] = theta[sigmaSqIndx]*spCor(e, theta[phiIndx], nu, covModel, &bk[threadID*nb]);
           if(l == k){
             C[mm*threadID+l*nnIndxLU[n+i]+k] += theta[tauSqIndx];
