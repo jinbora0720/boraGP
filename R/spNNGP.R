@@ -114,16 +114,16 @@ spNNGP <- function(formula, data = parent.frame(), coords, method = "response", 
         n.neighbors <- neighbor.info$n.neighbors
         nn.indx.run.time <- neighbor.info$nn.indx.run.time
         neighbor.info.provided <- TRUE
-        geodist <- neighbor.info$geodist
-        if (is.null(geodist)) {
-            geodist <- FALSE
-        } else {
-            if (geodist) {
-                distvec <- neighbor.info$distvec
-                if(is.null(distvec)){stop("error: geodesic distance vector must be specified")}
-            }
-        }
-        storage.mode(geodist) <- "integer"
+        # geodist <- neighbor.info$geodist
+        # if (is.null(geodist)) {
+        #     geodist <- FALSE
+        # } else {
+        #     if (geodist) {
+        #         distvec <- neighbor.info$distvec
+        #         if(is.null(distvec)){stop("error: geodesic distance vector must be specified")}
+        #     }
+        # }
+        # storage.mode(geodist) <- "integer"
 
         if(method == "latent"){
             
@@ -360,8 +360,8 @@ spNNGP <- function(formula, data = parent.frame(), coords, method = "response", 
             storage.mode(ui.indx) <- "integer"
         }
         
-        ## BJ: changed ## 
-        geodist <- FALSE
+        ## BJ: changed ##
+        # geodist <- FALSE
     }  
 
     
@@ -413,19 +413,19 @@ spNNGP <- function(formula, data = parent.frame(), coords, method = "response", 
 
         if(method == "response"){
             ## BJ: changed ## 
-            if (geodist) {
-                out <- .Call("rNNGPgeo", y, X, p, n, n.neighbors, coords, cov.model.indx, nn.indx, nn.indx.lu, 
-                             sigma.sq.IG, tau.sq.IG, phi.Unif, nu.Unif, 
-                             beta.starting, sigma.sq.starting, tau.sq.starting, phi.starting, nu.starting,
-                             sigma.sq.tuning, tau.sq.tuning, phi.tuning, nu.tuning,
-                             n.samples, n.omp.threads, verbose, n.report, n.rep, rep.indx, distvec)
-            } else {
+            # if (geodist) {
+            #     out <- .Call("rNNGPgeo", y, X, p, n, n.neighbors, coords, cov.model.indx, nn.indx, nn.indx.lu, 
+            #                  sigma.sq.IG, tau.sq.IG, phi.Unif, nu.Unif, 
+            #                  beta.starting, sigma.sq.starting, tau.sq.starting, phi.starting, nu.starting,
+            #                  sigma.sq.tuning, tau.sq.tuning, phi.tuning, nu.tuning,
+            #                  n.samples, n.omp.threads, verbose, n.report, n.rep, rep.indx, distvec)
+            # } else {
                 out <- .Call("rNNGP", y, X, p, n, n.neighbors, coords, cov.model.indx, nn.indx, nn.indx.lu, 
                              sigma.sq.IG, tau.sq.IG, phi.Unif, nu.Unif, 
                              beta.starting, sigma.sq.starting, tau.sq.starting, phi.starting, nu.starting,
                              sigma.sq.tuning, tau.sq.tuning, phi.tuning, nu.tuning,
                              n.samples, n.omp.threads, verbose, n.report, n.rep, rep.indx)
-            }
+            # }
         }else{##sequential
             
             out <- .Call("sNNGP", y, X, p, n, n.neighbors, coords, cov.model.indx, nn.indx, nn.indx.lu, u.indx, u.indx.lu, ui.indx,
@@ -475,9 +475,14 @@ spNNGP <- function(formula, data = parent.frame(), coords, method = "response", 
                                           nn.indx.run.time=nn.indx.run.time)
             }
         }else{
+            ## BJ: changed ## 
+            if (neighbor.info.provided) {
+                out$neighbor.info <- neighbor.info
+            } else {
             out$neighbor.info <- list(n.neighbors = n.neighbors, n.indx=mk.n.indx.list(nn.indx, n, n.neighbors),
                                       nn.indx=nn.indx, nn.indx.lu=nn.indx.lu, u.indx=u.indx, u.indx.lu=u.indx.lu, ui.indx=ui.indx, ord=ord,
                                       nn.indx.run.time=nn.indx.run.time, u.indx.run.time=u.indx.run.time)
+            }
         }
     }
 
@@ -527,4 +532,4 @@ spNNGP <- function(formula, data = parent.frame(), coords, method = "response", 
 
     out
     
-}
+} 

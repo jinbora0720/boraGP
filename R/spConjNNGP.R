@@ -432,8 +432,7 @@ spConjNNGP <- function(formula, data = parent.frame(), coords, knots, n.neighbor
     ## BJ: changed ##
     if(return.neighbor.info){
         if (neighbor.info.provided) {
-            out$neighbor.info <- list(n.neighbors = n.neighbors, n.indx=mk.n.indx.list(nn.indx, n, n.neighbors),
-                                      nn.indx=nn.indx, nn.indx.lu=nn.indx.lu, ord=ord)
+            out$neighbor.info <- neighbor.info
         } else {
             out$neighbor.info <- list(n.neighbors = n.neighbors, n.indx=mk.n.indx.list(nn.indx, n, n.neighbors),
                                       nn.indx=nn.indx, nn.indx.lu=nn.indx.lu, ord=ord,
