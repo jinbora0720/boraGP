@@ -1,11 +1,10 @@
 \name{spConjNNGP}
 \alias{spConjNNGP}
-\title{Function for Fitting Univariate Bayesian Conjugate Spatial
-  Regression Models}
+\title{Function for fitting univariate Bayesian conjugate spatial regression models}
 
 \description{
   The function \code{spConjNNGP} fits Gaussian univariate Bayesian conjugate spatial
-  regression models using Nearest Neighbor Gaussian Processes (NNGP).
+  regression models using \code{BORA-GP} models.
 }
 
 \usage{
@@ -95,8 +94,8 @@
     \item{n.omp.threads}{a positive integer indicating
       the number of threads to use for SMP parallel processing. The package must
       be compiled for OpenMP support. For most Intel-based machines, we recommend setting
-      \code{n.omp.threads} up to the number of hyperthreaded cores. Note, \code{n.omp.threads} > 1 might not
-    work on some systems.}
+      \code{n.omp.threads} up to the number of hyperthreaded cores. 
+      Note, \code{n.omp.threads} > 1 might not work on some systems.}
 
     \item{search.type}{a quoted keyword that specifies type of nearest
       neighbor search algorithm. Supported method key words are: \code{"cb"} and
@@ -131,8 +130,8 @@
       \code{neighbor.info} there is a list called \code{n.indx} that is of
       length \eqn{n}{n}. The \emph{i}-th element in \code{n.indx}
       corresponds to the \emph{i}-th row in \code{coords[ord,]} and holds
-      the vector of that location's nearest neighbor indices. This list can be useful for plotting the
-      neighbor graph if desired. }
+      the vector of that location's nearest neighbor indices. This list can be 
+      useful for plotting the neighbor graph if desired. }
     
     \item{neighbor.info}{see the \code{return.neighbor.info} argument
       description above.}
@@ -149,8 +148,8 @@
       \code{fit.rep} is \code{TRUE}, then \code{n.samples} also controls
       the number of fitted and replicated data samples.}
     
-  \item{verbose}{if \code{TRUE}, model specification and progress is printed to the screen. Otherwise, nothing is printed to
-    the screen.}
+  \item{verbose}{if \code{TRUE}, model specification and progress is printed to the screen.
+  Otherwise, nothing is printed to the screen.}
   
   \item{...}{currently no additional arguments.  }
 }
@@ -191,6 +190,10 @@
 }
 
 \references{
+  Jin, B., Herring, A.H. and Dunson, D. (2022)
+  Scalable Gaussian Processes on Physically Constrained Domains
+  \doi{arXiv:}.
+
   Datta, A., S. Banerjee, A.O. Finley, and A.E. Gelfand. (2016)
   Hierarchical Nearest-Neighbor Gaussian process models for large
   geostatistical datasets. \emph{Journal of the American Statistical
@@ -217,63 +220,62 @@
 
 \examples{
 
-rmvn <- function(n, mu=0, V = matrix(1)){
-  p <- length(mu)
-  if(any(is.na(match(dim(V),p))))
-    stop("Dimension problem!")
-  D <- chol(V)
-  t(matrix(rnorm(n*p), ncol=p)\%*\%D + rep(mu,rep(n,p)))
-}
+% BJ: replace this based on simulations 
+%rmvn <- function(n, mu=0, V = matrix(1)){
+%  p <- length(mu)
+%  if(any(is.na(match(dim(V),p))))
+%    stop("Dimension problem!")
+%  D <- chol(V)
+%  t(matrix(rnorm(n*p), ncol=p)\%*\%D + rep(mu,rep(n,p)))
+%}
 
-##Make some data
-set.seed(1)
-n <- 2000
-coords <- cbind(runif(n,0,1), runif(n,0,1))
+%##Make some data
+%set.seed(1)
+%n <- 2000
+%coords <- cbind(runif(n,0,1), runif(n,0,1))
 
-x <- cbind(1, rnorm(n))
+%x <- cbind(1, rnorm(n))
 
-B <- as.matrix(c(1,5))
+%B <- as.matrix(c(1,5))
 
-sigma.sq <- 5
-tau.sq <- 1
-phi <- 3/0.5
+%sigma.sq <- 5
+%tau.sq <- 1
+%phi <- 3/0.5
 
-D <- as.matrix(dist(coords))
-R <- exp(-phi*D)
-w <- rmvn(1, rep(0,n), sigma.sq*R)
-y <- rnorm(n, x\%*\%B + w, sqrt(tau.sq))
+%D <- as.matrix(dist(coords))
+%R <- exp(-phi*D)
+%w <- rmvn(1, rep(0,n), sigma.sq*R)
+%y <- rnorm(n, x\%*\%B + w, sqrt(tau.sq))
 
-ho <- sample(1:n, 1000)
+%ho <- sample(1:n, 1000)
 
-y.ho <- y[ho]
-x.ho <- x[ho,,drop=FALSE]
-w.ho <- w[ho]
-coords.ho <- coords[ho,]
+%y.ho <- y[ho]
+%x.ho <- x[ho,,drop=FALSE]
+%w.ho <- w[ho]
+%coords.ho <- coords[ho,]
 
-y <- y[-ho]
-x <- x[-ho,,drop=FALSE]
-w <- w[-ho,,drop=FALSE]
-coords <- coords[-ho,]
+%y <- y[-ho]
+%x <- x[-ho,,drop=FALSE]
+%w <- w[-ho,,drop=FALSE]
+%coords <- coords[-ho,]
 
-##Fit a Conjugate NNGP model and predict for the holdout
-sigma.sq.IG <- c(2, sigma.sq)
+%##Fit a Conjugate NNGP model and predict for the holdout
+%sigma.sq.IG <- c(2, sigma.sq)
 
-cov.model <- "exponential"
+%cov.model <- "exponential"
 
-g <- 10
-theta.alpha <- cbind(seq(phi,30,length.out=g), seq(tau.sq/sigma.sq,5,length.out=g))
+%g <- 10
+%theta.alpha <- cbind(seq(phi,30,length.out=g), seq(tau.sq/sigma.sq,5,length.out=g))
 
-colnames(theta.alpha) <- c("phi", "alpha")
+%colnames(theta.alpha) <- c("phi", "alpha")
 
-m.c <- spConjNNGP(y~x-1, coords=coords, n.neighbors = 10,
-                  X.0 = x.ho, coords.0 = coords.ho,
-                  k.fold = 5, score.rule = "crps",
-                  n.omp.threads = 1,
-                  theta.alpha = theta.alpha, sigma.sq.IG = sigma.sq.IG, cov.model = cov.model)
+%m.c <- spConjNNGP(y~x-1, coords=coords, n.neighbors = 10,
+%                  X.0 = x.ho, coords.0 = coords.ho,
+%                  k.fold = 5, score.rule = "crps",
+%                  n.omp.threads = 1,
+%                  theta.alpha = theta.alpha, sigma.sq.IG = sigma.sq.IG, cov.model = cov.model)
 
-m.c
-
-
+%m.c
 }
 
 

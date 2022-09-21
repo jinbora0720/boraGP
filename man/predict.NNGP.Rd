@@ -2,7 +2,7 @@
 
 \alias{predict.NNGP}
 
-\title{Function for prediction at new locations using \code{NNGP} models.}
+\title{Function for prediction at new locations using \code{BORA-GP} models.}
 
 \description{
   The function \code{predict} collects posterior predictive samples
@@ -34,8 +34,8 @@
   \item{n.omp.threads}{a positive integer indicating
     the number of threads to use for SMP parallel processing. The package must
     be compiled for OpenMP support. For most Intel-based machines, we recommend setting
-    \code{n.omp.threads} up to the number of hyperthreaded cores. Note, \code{n.omp.threads} > 1 might not
-    work on some systems.}
+    \code{n.omp.threads} up to the number of hyperthreaded cores. 
+    Note, \code{n.omp.threads} > 1 might not work on some systems.}
   \item{verbose}{if \code{TRUE}, model specification and progress of the
     sampler is printed to the screen. Otherwise, nothing is printed to
     the screen.  }
@@ -56,7 +56,11 @@
 }
 
 \references{
-   Datta, A., S. Banerjee, A.O. Finley, and A.E. Gelfand. (2016)
+  Jin, B., Herring, A.H. and Dunson, D. (2022)
+  Scalable Gaussian Processes on Physically Constrained Domains
+  \doi{arXiv:}.
+
+  Datta, A., S. Banerjee, A.O. Finley, and A.E. Gelfand. (2016)
   Hierarchical Nearest-Neighbor Gaussian process models for large
   geostatistical datasets. \emph{Journal of the American Statistical
   Association}, \doi{10.1080/01621459.2015.1044091}.
@@ -76,75 +80,76 @@
 
 \examples{
 
-rmvn <- function(n, mu=0, V = matrix(1)){
-  p <- length(mu)
-  if(any(is.na(match(dim(V),p))))
-    stop("Dimension problem!")
-  D <- chol(V)
-  t(matrix(rnorm(n*p), ncol=p)\%*\%D + rep(mu,rep(n,p)))
-}
+% BJ: replace this based on simulations 
+%rmvn <- function(n, mu=0, V = matrix(1)){
+%  p <- length(mu)
+%  if(any(is.na(match(dim(V),p))))
+%    stop("Dimension problem!")
+%  D <- chol(V)
+%  t(matrix(rnorm(n*p), ncol=p)\%*\%D + rep(mu,rep(n,p)))
+%}
 
-##Make some data
-set.seed(1)
-n <- 100
-coords <- cbind(runif(n,0,1), runif(n,0,1))
+%##Make some data
+%set.seed(1)
+%n <- 100
+%coords <- cbind(runif(n,0,1), runif(n,0,1))
 
-x <- cbind(1, rnorm(n))
+%x <- cbind(1, rnorm(n))
 
-B <- as.matrix(c(1,5))
+%B <- as.matrix(c(1,5))
 
-sigma.sq <- 5
-tau.sq <- 1
-phi <- 3/0.5
+%sigma.sq <- 5
+%tau.sq <- 1
+%phi <- 3/0.5
 
-D <- as.matrix(dist(coords))
-R <- exp(-phi*D)
-w <- rmvn(1, rep(0,n), sigma.sq*R)
-y <- rnorm(n, x\%*\%B + w, sqrt(tau.sq))
+%D <- as.matrix(dist(coords))
+%R <- exp(-phi*D)
+%w <- rmvn(1, rep(0,n), sigma.sq*R)
+%y <- rnorm(n, x\%*\%B + w, sqrt(tau.sq))
 
-ho <- sample(1:n, 50)
+%ho <- sample(1:n, 50)
 
-y.ho <- y[ho]
-x.ho <- x[ho,,drop=FALSE]
-w.ho <- w[ho]
-coords.ho <- coords[ho,]
+%y.ho <- y[ho]
+%x.ho <- x[ho,,drop=FALSE]
+%w.ho <- w[ho]
+%coords.ho <- coords[ho,]
 
-y <- y[-ho]
-x <- x[-ho,,drop=FALSE]
-w <- w[-ho,,drop=FALSE]
-coords <- coords[-ho,]
+%y <- y[-ho]
+%x <- x[-ho,,drop=FALSE]
+%w <- w[-ho,,drop=FALSE]
+%coords <- coords[-ho,]
 
-##Fit a Response, Latent, and Conjugate NNGP model
-n.samples <- 500
+%##Fit a Response, Latent, and Conjugate NNGP model
+%n.samples <- 500
 
-starting <- list("phi"=phi, "sigma.sq"=5, "tau.sq"=1)
+%starting <- list("phi"=phi, "sigma.sq"=5, "tau.sq"=1)
 
-tuning <- list("phi"=0.5, "sigma.sq"=0.5, "tau.sq"=0.5)
+%tuning <- list("phi"=0.5, "sigma.sq"=0.5, "tau.sq"=0.5)
 
-priors <- list("phi.Unif"=c(3/1, 3/0.01), "sigma.sq.IG"=c(2, 5), "tau.sq.IG"=c(2, 1))
+%priors <- list("phi.Unif"=c(3/1, 3/0.01), "sigma.sq.IG"=c(2, 5), "tau.sq.IG"=c(2, 1))
 
-cov.model <- "exponential"
+%cov.model <- "exponential"
 
-n.report <- 500
+%n.report <- 500
 
-##Latent
-m.s <- spNNGP(y~x-1, coords=coords, starting=starting, method="latent", n.neighbors=10,
-              tuning=tuning, priors=priors, cov.model=cov.model,
-              n.samples=n.samples, n.omp.threads=1, n.report=n.report)
+%##Latent
+%m.s <- spNNGP(y~x-1, coords=coords, starting=starting, method="latent", n.neighbors=10,
+%              tuning=tuning, priors=priors, cov.model=cov.model,
+%              n.samples=n.samples, n.omp.threads=1, n.report=n.report)
 
-p.s <- predict(m.s, X.0 = x.ho, coords.0 = coords.ho, n.omp.threads=1)
+%p.s <- predict(m.s, X.0 = x.ho, coords.0 = coords.ho, n.omp.threads=1)
 
-plot(apply(p.s$p.w.0, 1, mean), w.ho)
-plot(apply(p.s$p.y.0, 1, mean), y.ho)
+%plot(apply(p.s$p.w.0, 1, mean), w.ho)
+%plot(apply(p.s$p.y.0, 1, mean), y.ho)
 
-##Response
-m.r <- spNNGP(y~x-1, coords=coords, starting=starting, method="response", n.neighbors=10,
-              tuning=tuning, priors=priors, cov.model=cov.model,
-              n.samples=n.samples, n.omp.threads=1, n.report=n.report)
+%##Response
+%m.r <- spNNGP(y~x-1, coords=coords, starting=starting, method="response", n.neighbors=10,
+%              tuning=tuning, priors=priors, cov.model=cov.model,
+%              n.samples=n.samples, n.omp.threads=1, n.report=n.report)
 
-p.r <- predict(m.r, X.0 = x.ho, coords.0 = coords.ho, n.omp.threads=1)
+%p.r <- predict(m.r, X.0 = x.ho, coords.0 = coords.ho, n.omp.threads=1)
 
-points(apply(p.r$p.y.0, 1, mean), y.ho, pch=19, col="blue")
+%points(apply(p.r$p.y.0, 1, mean), y.ho, pch=19, col="blue")
 
 %% BJ: changed %%
 % ##Conjugate

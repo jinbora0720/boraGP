@@ -1,16 +1,15 @@
 \name{spNNGP}
 \alias{spNNGP}
-\title{Function for Fitting Univariate Bayesian Spatial Regression
-  Models}
+\title{Function for fitting univariate Bayesian spatial regression models}
 
 \description{
   The function \code{spNNGP} fits Gaussian and non-Gaussian univariate Bayesian spatial
-  regression models using Nearest Neighbor Gaussian Processes (NNGP).
+  regression models using \code{BORA-GP} models.
 }
 
 \usage{
 spNNGP(formula, data = parent.frame(), coords, method = "response",
-      family="gaussian", weights, n.neighbors = 15, 
+      family = "gaussian", weights, n.neighbors = 15, 
       starting, tuning, priors, cov.model = "exponential",
       n.samples, n.omp.threads = 1, search.type = "cb", ord,
       return.neighbor.info = FALSE, neighbor.info,
@@ -51,12 +50,12 @@ spNNGP(formula, data = parent.frame(), coords, method = "response",
     vector of length \eqn{n}{n} that specifies the number of trials for
     each observation used there are differences in the number of trials. }
   
-  \item{n.neighbors}{number of neighbors used in the NNGP.}
+  \item{n.neighbors}{number of neighbors used in BORA-GP.}
   
   \item{starting}{a list with each tag corresponding to a parameter name. Valid tags are \code{beta}, \code{sigma.sq},
     \code{tau.sq}, \code{phi}, and \code{nu}. \code{nu} is only
     specified if \code{cov.model="matern"}. The value portion of each
-    tag is the parameter's startingvalue. }
+    tag is the parameter's starting value.}
   
   \item{tuning}{a list with each tag corresponding to a parameter
     name. Valid tags are \code{sigma.sq}, \code{tau.sq}, \code{phi}, and
@@ -132,18 +131,19 @@ spNNGP(formula, data = parent.frame(), coords, method = "response",
   
   \item{return.neighbor.info}{if \code{TRUE}, a list called
     \code{neighbor.info} containing several data structures used for
-    fitting the NNGP model is returned. If there is no change in input
+    fitting the BORA-GP model is returned. If there is no change in input
     data or \code{n.neighbors}, this list can be passed to subsequent \code{spNNGP} calls via the \code{neighbor.info} argument to avoid
     the neighbor search, which can be time consuming if \eqn{n}{n} is
     large. In addition to the several cryptic data structures in
     \code{neighbor.info} there is a list called \code{n.indx} that is of
     length \eqn{n}{n}. The \emph{i}-th element in \code{n.indx}
     corresponds to the \emph{i}-th row in \code{coords[ord,]} and holds
-    the vector of that location's nearest neighbor indices. This list can be useful for plotting the
-    neighbor graph if desired. }
+    the vector of that location's nearest neighbor indices. This list can be useful 
+    for plotting the neighbor graph if desired. }
   
-    \item{neighbor.info}{see the \code{return.neighbor.info} argument
-      description above.}    
+    \item{neighbor.info}{specify physically sensible nearest neighbors here. 
+    See the \code{return.neighbor.info} argument description above for required elements.
+    If left unspecified, nearest neighbors by Euclidean distance are used.}    
 
     \item{n.report}{the interval to report Metropolis sampler acceptance
       and MCMC progress.}  
@@ -196,6 +196,10 @@ in the \code{starting} and \code{tuning} lists.
 }
 
 \references{
+  Jin, B., Herring, A.H. and Dunson, D. (2022)
+  Scalable Gaussian Processes on Physically Constrained Domains
+  \doi{arXiv:}.
+  
   Datta, A., S. Banerjee, A.O. Finley, and A.E. Gelfand. (2016)
   Hierarchical Nearest-Neighbor Gaussian process models for large
   geostatistical datasets. \emph{Journal of the American Statistical
@@ -216,86 +220,87 @@ in the \code{starting} and \code{tuning} lists.
 
 \examples{
 
-rmvn <- function(n, mu=0, V = matrix(1)){
-  p <- length(mu)
-  if(any(is.na(match(dim(V),p))))
-    stop("Dimension problem!")
-  D <- chol(V)
-  t(matrix(rnorm(n*p), ncol=p)\%*\%D + rep(mu,rep(n,p)))
-}
+% BJ: replace this based on simulations 
+%rmvn <- function(n, mu=0, V = matrix(1)){
+%  p <- length(mu)
+%  if(any(is.na(match(dim(V),p))))
+%    stop("Dimension problem!")
+%  D <- chol(V)
+%  t(matrix(rnorm(n*p), ncol=p)\%*\%D + rep(mu,rep(n,p)))
+%}
 
-##Make some data
-set.seed(1)
-n <- 100
-coords <- cbind(runif(n,0,1), runif(n,0,1))
+%##Make some data
+%set.seed(1)
+%n <- 100
+%coords <- cbind(runif(n,0,1), runif(n,0,1))
 
-x <- cbind(1, rnorm(n))
+%x <- cbind(1, rnorm(n))
 
-B <- as.matrix(c(1,5))
+%B <- as.matrix(c(1,5))
 
-sigma.sq <- 5
-tau.sq <- 1
-phi <- 3/0.5
+%sigma.sq <- 5
+%tau.sq <- 1
+%phi <- 3/0.5
 
-D <- as.matrix(dist(coords))
-R <- exp(-phi*D)
-w <- rmvn(1, rep(0,n), sigma.sq*R)
-y <- rnorm(n, x\%*\%B + w, sqrt(tau.sq))
+%D <- as.matrix(dist(coords))
+%R <- exp(-phi*D)
+%w <- rmvn(1, rep(0,n), sigma.sq*R)
+%y <- rnorm(n, x\%*\%B + w, sqrt(tau.sq))
 
-##Fit a Response and Latent NNGP model
-n.samples <- 500
+%##Fit a Response and Latent NNGP model
+%n.samples <- 500
 
-starting <- list("phi"=phi, "sigma.sq"=5, "tau.sq"=1)
+%starting <- list("phi"=phi, "sigma.sq"=5, "tau.sq"=1)
 
-tuning <- list("phi"=0.5, "sigma.sq"=0.5, "tau.sq"=0.5)
+%tuning <- list("phi"=0.5, "sigma.sq"=0.5, "tau.sq"=0.5)
 
-priors <- list("phi.Unif"=c(3/1, 3/0.01), "sigma.sq.IG"=c(2, 5), "tau.sq.IG"=c(2, 1))
+%priors <- list("phi.Unif"=c(3/1, 3/0.01), "sigma.sq.IG"=c(2, 5), "tau.sq.IG"=c(2, 1))
 
-cov.model <- "exponential"
+%cov.model <- "exponential"
 
-m.s <- spNNGP(y~x-1, coords=coords, starting=starting, method="latent", n.neighbors=10,
-              tuning=tuning, priors=priors, cov.model=cov.model,
-              n.samples=n.samples, n.omp.threads=1)
+%m.s <- spNNGP(y~x-1, coords=coords, starting=starting, method="latent", n.neighbors=10,
+%              tuning=tuning, priors=priors, cov.model=cov.model,
+%              n.samples=n.samples, n.omp.threads=1)
 
-summary(m.s)
-plot(apply(m.s$p.w.samples, 1, median), w)
+%summary(m.s)
+%plot(apply(m.s$p.w.samples, 1, median), w)
 
-m.r <- spNNGP(y~x-1, coords=coords, starting=starting, method="response", n.neighbors=10,
-              tuning=tuning, priors=priors, cov.model=cov.model,
-              n.samples=n.samples, n.omp.threads=1)
+%m.r <- spNNGP(y~x-1, coords=coords, starting=starting, method="response", n.neighbors=10,
+%              tuning=tuning, priors=priors, cov.model=cov.model,
+%              n.samples=n.samples, n.omp.threads=1)
 
-summary(m.r)
+%summary(m.r)
 
-##Fit with some user defined neighbor ordering
+%##Fit with some user defined neighbor ordering
 
-##ord <- order(coords[,2]) ##y-axis 
-ord <- order(coords[,1]+coords[,2]) ##x+y-axis
-##ord <- sample(1:n, n) ##random
+%##ord <- order(coords[,2]) ##y-axis 
+%ord <- order(coords[,1]+coords[,2]) ##x+y-axis
+%##ord <- sample(1:n, n) ##random
 
-m.r.xy <- spNNGP(y~x-1, coords=coords, starting=starting, method="response", n.neighbors=10,
-              tuning=tuning, priors=priors, cov.model=cov.model,
-              ord=ord, return.neighbor.info=TRUE,
-              n.samples=n.samples, n.omp.threads=1)
+%m.r.xy <- spNNGP(y~x-1, coords=coords, starting=starting, method="response", n.neighbors=10,
+%              tuning=tuning, priors=priors, cov.model=cov.model,
+%              ord=ord, return.neighbor.info=TRUE,
+%              n.samples=n.samples, n.omp.threads=1)
 
-summary(m.r.xy)
+%summary(m.r.xy)
 
-\dontrun{
-##Visualize the neighbor sets and ordering constraint
-n.indx <- m.r.xy$neighbor.info$n.indx
-ord <- m.r.xy$neighbor.info$ord
+%\dontrun{
+%##Visualize the neighbor sets and ordering constraint
+%n.indx <- m.r.xy$neighbor.info$n.indx
+%ord <- m.r.xy$neighbor.info$ord
 
-##This is how the data are ordered internally for model fitting
-coords.ord <- coords[ord,]
+%##This is how the data are ordered internally for model fitting
+%coords.ord <- coords[ord,]
 
-for(i in 1:n){
-
-    plot(coords.ord, cex=1, xlab="Easting", ylab="Northing")
-    points(coords.ord[i,,drop=FALSE], col="blue", pch=19, cex=1)
-    points(coords.ord[n.indx[[i]],,drop=FALSE], col="red", pch=19, cex=1)
-
-    readline(prompt = "Pause. Press <Enter> to continue...")
-}
-}
+%for(i in 1:n){
+%
+%    plot(coords.ord, cex=1, xlab="Easting", ylab="Northing")
+%    points(coords.ord[i,,drop=FALSE], col="blue", pch=19, cex=1)
+%    points(coords.ord[n.indx[[i]],,drop=FALSE], col="red", pch=19, cex=1)
+%
+%    readline(prompt = "Pause. Press <Enter> to continue...")
+%}
+%}
 
 
 }

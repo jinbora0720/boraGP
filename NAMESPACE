@@ -1,4 +1,4 @@
-useDynLib(boraGP, .registration=TRUE)
+useDynLib(boraGP, .registration=TRUE, .fixes = "C_")
 
 export(spNNGP)
 export(spConjNNGP)
@@ -22,3 +22,5 @@ import(Formula, coda, RANN)
 importFrom("stats", "coefficients", "lm", "contrasts", "is.empty.model", "model.matrix", "model.response", "terms", "dnorm", "pnorm", "dbinom", "glm", "rnorm", "var", "rbinom", "fitted", "quantile", "rgamma")
 importFrom("utils", "setTxtProgressBar", "txtProgressBar")
 importFrom("RANN", "nn2")
+importFrom("doParallel", "registerDoParallel")
+importFrom("foreach", "%dopar%")

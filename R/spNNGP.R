@@ -1,4 +1,5 @@
-spNNGP <- function(formula, data = parent.frame(), coords, method = "response", family="gaussian", weights, n.neighbors = 15, 
+spNNGP <- function(formula, data = parent.frame(), coords, method = "response", 
+                   family = "gaussian", weights, n.neighbors = 15, 
                    starting, tuning, priors, cov.model = "exponential",
                    n.samples, n.omp.threads = 1, search.type = "cb", ord, 
                    return.neighbor.info = FALSE, neighbor.info,
@@ -114,16 +115,6 @@ spNNGP <- function(formula, data = parent.frame(), coords, method = "response", 
         n.neighbors <- neighbor.info$n.neighbors
         nn.indx.run.time <- neighbor.info$nn.indx.run.time
         neighbor.info.provided <- TRUE
-        # geodist <- neighbor.info$geodist
-        # if (is.null(geodist)) {
-        #     geodist <- FALSE
-        # } else {
-        #     if (geodist) {
-        #         distvec <- neighbor.info$distvec
-        #         if(is.null(distvec)){stop("error: geodesic distance vector must be specified")}
-        #     }
-        # }
-        # storage.mode(geodist) <- "integer"
 
         if(method == "latent"){
             
@@ -360,8 +351,6 @@ spNNGP <- function(formula, data = parent.frame(), coords, method = "response", 
             storage.mode(ui.indx) <- "integer"
         }
         
-        ## BJ: changed ##
-        # geodist <- FALSE
     }  
 
     
@@ -412,20 +401,11 @@ spNNGP <- function(formula, data = parent.frame(), coords, method = "response", 
     if(family == "gaussian"){
 
         if(method == "response"){
-            ## BJ: changed ## 
-            # if (geodist) {
-            #     out <- .Call("rNNGPgeo", y, X, p, n, n.neighbors, coords, cov.model.indx, nn.indx, nn.indx.lu, 
-            #                  sigma.sq.IG, tau.sq.IG, phi.Unif, nu.Unif, 
-            #                  beta.starting, sigma.sq.starting, tau.sq.starting, phi.starting, nu.starting,
-            #                  sigma.sq.tuning, tau.sq.tuning, phi.tuning, nu.tuning,
-            #                  n.samples, n.omp.threads, verbose, n.report, n.rep, rep.indx, distvec)
-            # } else {
-                out <- .Call("rNNGP", y, X, p, n, n.neighbors, coords, cov.model.indx, nn.indx, nn.indx.lu, 
-                             sigma.sq.IG, tau.sq.IG, phi.Unif, nu.Unif, 
-                             beta.starting, sigma.sq.starting, tau.sq.starting, phi.starting, nu.starting,
-                             sigma.sq.tuning, tau.sq.tuning, phi.tuning, nu.tuning,
-                             n.samples, n.omp.threads, verbose, n.report, n.rep, rep.indx)
-            # }
+            out <- .Call("rNNGP", y, X, p, n, n.neighbors, coords, cov.model.indx, nn.indx, nn.indx.lu, 
+                         sigma.sq.IG, tau.sq.IG, phi.Unif, nu.Unif, 
+                         beta.starting, sigma.sq.starting, tau.sq.starting, phi.starting, nu.starting,
+                         sigma.sq.tuning, tau.sq.tuning, phi.tuning, nu.tuning,
+                         n.samples, n.omp.threads, verbose, n.report, n.rep, rep.indx)
         }else{##sequential
             
             out <- .Call("sNNGP", y, X, p, n, n.neighbors, coords, cov.model.indx, nn.indx, nn.indx.lu, u.indx, u.indx.lu, ui.indx,

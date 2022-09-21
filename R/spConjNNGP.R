@@ -157,7 +157,7 @@ spConjNNGP <- function(formula, data = parent.frame(), coords, knots, n.neighbor
             stop("error: either coords.0 has more than two columns or the number of rows is different than
           X.0")
         }
-        
+         
         ## BJ: changed ##
         if (neighbor.info.provided) {
             if (is.null(nn.indx.0)) {

@@ -2,17 +2,15 @@ Package: boraGP
 Title: Barrier Overlap-Removal Acyclic Directed Graph Gaussian Process 
 Version: 0.0.1
 Date: 2021-3-30
-Authors@R: c(person("Bora", "Jin", role=c("aut", "cre"), email="bora.jin@duke.edu"), person("Andrew", "Finley", role="aut", email="finleya@msu.edu"), person("Abhirup", "Datta", role="aut", email="abhidatta@jhu.edu"), person("Sudipto", "Banerjee", role="aut", email="sudipto@ucla.edu"))
+Authors@R: person("Bora", "Jin", role=c("aut", "cre"), email="bora.jin@duke.edu")
 Maintainer: Bora Jin <bora.jin@duke.edu>
-Author: Bora Jin [aut, cre], 
-  Andrew Finley [aut],
-  Abhirup Datta [aut],
-  Sudipto Banerjee [aut]
+Author: Bora Jin [aut, cre]
 Depends: R (>= 3.5.0), coda, Formula, RANN
-Description: Fits univariate Bayesian spatial regression models for large datasets using Nearest Neighbor Gaussian Processes (NNGP) detailed in Finley, Datta, Banerjee (2020) <arXiv:2001.09111>, and Finley, Datta, Cook, Morton, Andersen, and Banerjee (2019) <doi:10.1080/10618600.2018.1537924> and Datta, Banerjee, Finley, and Gelfand (2016) <doi:10.1080/01621459.2015.1044091>.
+Description: Fits univariate Bayesian spatial regressions for large data using Barrier Overlap-Removal Acyclic Directed Graph Gaussian Process (BORA-GP) detailed in Jin, Herring, Dunson (2022) <arXiv:>, based on Finley, Datta, Banerjee (2020) <arXiv:2001.09111>, Finley, Datta, Cook, Morton, Andersen, and Banerjee (2019) <doi:10.1080/10618600.2018.1537924> and Datta, Banerjee, Finley, and Gelfand (2016) <doi:10.1080/01621459.2015.1044091>.
 License: GPL (>= 2)
 Encoding: UTF-8
 URL: 
 Repository: 
 NeedsCompilation: yes
 Packaged: 
+LinkingTo: Rcpp, RcppArmadillo

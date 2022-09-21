@@ -274,18 +274,18 @@ fitted.NNGP <- function(object, sub.sample, ...){
 }
 
 fitted.PGLogit <- function(object, sub.sample, ...){
-
+    
     update.fit.rep <- FALSE
     
     if(!missing(sub.sample)){
         update.fit.rep <- TRUE
     }
-
+    
     if(missing(sub.sample) & !"s.indx" %in% names(object)){
         update.fit.rep <- TRUE
         sub.sample <- list() #uses default sub.sample start, end, thin
     }
-        
+    
     if(update.fit.rep){
         n.samples <- nrow(object$p.beta.samples)
         start <- ifelse(!"start" %in% names(sub.sample), floor(0.5*n.samples), sub.sample$start)
@@ -305,7 +305,7 @@ fitted.PGLogit <- function(object, sub.sample, ...){
         ##replicates
         y.rep.samples <- apply(1/(1+exp(-y.hat.samples)), 2, function(x) rbinom(nrow(object$X), object$weights, x))
         y.rep.quants <- t(apply(y.rep.samples, 1, function(x) quantile(x, prob=c(0.5, 0.05, 0.975))))
-
+        
         return(list(y.hat.quants=y.hat.quants, y.hat.samples=y.hat.samples, y.rep.quants=y.rep.quants, y.rep.samples=y.rep.samples, sub.sample=sub.sample, s.indx=s.indx))
     }else{
         return(list(y.hat.quants=object$y.hat.quants, y.hat.samples=object$y.hat.samples,
@@ -331,7 +331,7 @@ residuals.NNGP <- function(object, sub.sample, ...){
 }
 
 residuals.PGLogit <- function(object, sub.sample, ...){
-
+    
     out <- fitted(object, sub.sample)
     y <- object$y
     
@@ -352,7 +352,7 @@ summary.PGLogit <- function(object, sub.sample, quantiles = c(0.025, 0.25, 0.5, 
     print(object)
     
     n.samples <- nrow(object$p.beta.samples)
-
+    
     if(missing(sub.sample)){
         sub.sample <- list()
     }
@@ -365,7 +365,7 @@ summary.PGLogit <- function(object, sub.sample, quantiles = c(0.025, 0.25, 0.5, 
     if(!is.numeric(thin) || thin >= n.samples){stop("invalid thin")}
     sub.sample <- list(start=start, end=end, thin=thin)
     s.indx <- seq(as.integer(start), as.integer(end), by=as.integer(thin))
-
+    
     cat("Chain sub.sample:\n")
     cat(paste("start = ",start,"\n", sep=""))
     cat(paste("end = ",end,"\n", sep=""))
@@ -605,17 +605,6 @@ predict.NNGP <- function(object, X.0, coords.0, nn.indx.0 = NULL, sub.sample, n.
         n.neighbors <- object$n.neighbors
         cov.model.indx <- object$cov.model.indx
         
-        ## BJ: changed ## 
-        # geodist <- object$neighbor.info$geodist
-        # if (is.null(geodist)) geodist <- FALSE
-        # if (geodist) {
-        #     nn.indx <- object$neighbor.info$nn.indx
-        #     nn.indx.lu <- object$neighbor.info$nn.indx.lu
-        #     distvec <- object$neighbor.info$distvec
-        #     distvec0 <- object$neighbor.info$distvec0
-        #     order_ord <- order(object$neighbor.info$ord)
-        # }
-        
         ##subsamples
         if(missing(sub.sample)){
             sub.sample <- list()
@@ -689,19 +678,12 @@ predict.NNGP <- function(object, X.0, coords.0, nn.indx.0 = NULL, sub.sample, n.
         ptm <- proc.time()
         
         ## BJ: changed ##
-        ##if(class(object)[2] == "latent"){
         if(out$type[1] == "latent"){
             out <- c(out, .Call("sNNGPPredict", X, y, coords, n, p, n.neighbors, X.0, coords.0, q, nn.indx.0, 
                                 p.beta.samples, p.theta.samples, p.w.samples, n.samples, family.indx, cov.model.indx, n.omp.threads, verbose, n.report))
         }else{
-            # if (geodist) {
-            #     out <- c(out, .Call("rNNGPPredictgeo", X, y, coords, n, p, n.neighbors, X.0, coords.0, q, nn.indx.0, 
-            #                         p.beta.samples, p.theta.samples, n.samples, cov.model.indx, n.omp.threads, verbose, n.report, 
-            #                         distvec0, nn.indx, nn.indx.lu, distvec, order_ord))
-            # } else {
-                out <- c(out, .Call("rNNGPPredict", X, y, coords, n, p, n.neighbors, X.0, coords.0, q, nn.indx.0, 
-                                    p.beta.samples, p.theta.samples, n.samples, cov.model.indx, n.omp.threads, verbose, n.report))
-            # }
+            out <- c(out, .Call("rNNGPPredict", X, y, coords, n, p, n.neighbors, X.0, coords.0, q, nn.indx.0, 
+                                p.beta.samples, p.theta.samples, n.samples, cov.model.indx, n.omp.threads, verbose, n.report))
         }
         
         out$run.time <- proc.time() - ptm
