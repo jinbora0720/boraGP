@@ -26,9 +26,11 @@ barrier_neighbor <- function(coords, coords.0 = NULL, ord = NULL,
   
   # make coords data frame
   coords <- data.frame(coords)
-  coords.0 <- data.frame(coords.0)
-  colnames(coords) = colnames(coords.0) <- 
-    c("easting", "northing")
+  colnames(coords) <- c("easting", "northing")
+  if (!is.null(coords.0)) {
+    coords.0 <- data.frame(coords.0)
+    colnames(coords.0) <- c("easting", "northing")
+  }
   
   # make coords as an sf object
   crs <- sf::st_crs(barrier)
