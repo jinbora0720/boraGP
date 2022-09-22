@@ -24,7 +24,7 @@
     \code{X.0}. }
   %% BJ: changed %%
   \item{nn.indx.0}{user-specified nearest neighbor index}
-  \item{sub.sample}{an optional list that specifies the samples to included in
+  \item{sub.sample}{an optional list that specifies the samples to include in
     the composition sampling a non-Conjugate model. Valid tags are \code{start},
     \code{end}, and \code{thin}. Given the value associated with the tags,
     the sample subset is selected using \code{seq(as.integer(start),
