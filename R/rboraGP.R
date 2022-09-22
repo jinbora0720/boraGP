@@ -1,6 +1,6 @@
 rboraGP <- function(coords, neighbor.info, X = NULL,
                     beta, sig_sq, phi, nu = NULL, tau_sq,
-                    coords.0 = NULL, nn.indx.0, X.0 = NULL,
+                    coords.0 = NULL, nn.indx.0 = NULL, X.0 = NULL,
                     base_cov = "exponential") {
 
   Ctilde <- create_Ctilde(coords = coords,

@@ -1,5 +1,6 @@
-
-#include "cov_matern.h"
+#include <RcppArmadillo.h>
+#include <R.h>
+//#include "cov_matern.h"
 
 //[[Rcpp::export]]
 arma::mat Cov_matern(const arma::mat& dist, 
@@ -24,3 +25,6 @@ arma::mat Cov_matern(const arma::mat& dist,
   
   return out;
 }
+
+
+

@@ -1,4 +1,4 @@
-useDynLib(boraGP, .registration=TRUE, .fixes = "C_")
+useDynLib(boraGP, .registration=TRUE)
 
 export(spNNGP)
 export(spConjNNGP)
@@ -6,6 +6,7 @@ export(PGLogit)
 export(spDiag)
 export(rboraGP)
 export(barrier_neighbor)
+export(Cov_matern)
 
 ## methods for class betareg
 S3method("print", "NNGP")
