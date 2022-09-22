@@ -14,7 +14,7 @@
 
 extern "C" {
   
-  SEXP PGLogit(SEXP y_r, SEXP X_r, SEXP p_r, SEXP n_r, SEXP nTrial_r, SEXP betaStarting_r, SEXP nSamples_r, SEXP nThreads_r, SEXP verbose_r){
+  SEXP C_PGLogit(SEXP y_r, SEXP X_r, SEXP p_r, SEXP n_r, SEXP nTrial_r, SEXP betaStarting_r, SEXP nSamples_r, SEXP nThreads_r, SEXP verbose_r){
     
     int i, j, s, info, nProtect=0;
     const int inc = 1;

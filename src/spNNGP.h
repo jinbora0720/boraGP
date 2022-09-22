@@ -38,7 +38,7 @@ extern "C" {
   SEXP sNNGPPredict(SEXP X_r, SEXP y_r, SEXP coords_r, SEXP n_r, SEXP p_r, SEXP m_r, SEXP X0_r, SEXP coords0_r, SEXP q_r, SEXP nnIndx0_r, 
 		    SEXP betaSamples_r, SEXP thetaSamples_r, SEXP wSamples_r, SEXP nSamples_r, SEXP family_r, SEXP covModel_r, SEXP nThreads_r, SEXP verbose_r, SEXP nReport_r);
 
-  SEXP PGLogit(SEXP y_r, SEXP X_r, SEXP p_r, SEXP n_r, SEXP nTrial_r, SEXP betaStarting_r, SEXP nSamples_r, SEXP nThreads_r, SEXP verbose_r);
+  SEXP C_PGLogit(SEXP y_r, SEXP X_r, SEXP p_r, SEXP n_r, SEXP nTrial_r, SEXP betaStarting_r, SEXP nSamples_r, SEXP nThreads_r, SEXP verbose_r);
 
   SEXP rNNGPReplicated(SEXP X_r, SEXP p_r, SEXP n_r, SEXP m_r, SEXP coords_r, SEXP covModel_r, SEXP nnIndx_r, SEXP nnIndxLU_r,
 		   SEXP beta_r, SEXP theta_r, 

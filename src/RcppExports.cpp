@@ -26,12 +26,12 @@ BEGIN_RCPP
 END_RCPP
 }
 
+RcppExport SEXP C_mkNNIndx(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+RcppExport SEXP C_mkNNIndxCB(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+RcppExport SEXP C_mkUIndx(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+RcppExport SEXP C_PGLogit(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 RcppExport SEXP cNNGP(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 RcppExport SEXP cSLGP(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP mkNNIndx(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP mkNNIndxCB(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP mkUIndx(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP PGLogit(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 RcppExport SEXP rNNGP(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 RcppExport SEXP rNNGPPredict(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 RcppExport SEXP rNNGPReplicated(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
@@ -41,12 +41,12 @@ RcppExport SEXP sNNGPPredict(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEX
 
 static const R_CallMethodDef CallEntries[] = {
     {"_boraGP_Cov_matern", (DL_FUNC) &_boraGP_Cov_matern, 4},
+    {"C_mkNNIndx",      (DL_FUNC) &C_mkNNIndx,       7},
+    {"C_mkNNIndxCB",    (DL_FUNC) &C_mkNNIndxCB,     7},
+    {"C_mkUIndx",       (DL_FUNC) &C_mkUIndx,        8},
+    {"C_PGLogit",       (DL_FUNC) &C_PGLogit,        9},
     {"cNNGP",           (DL_FUNC) &cNNGP,           18},
     {"cSLGP",           (DL_FUNC) &cSLGP,           21},
-    {"mkNNIndx",        (DL_FUNC) &mkNNIndx,         7},
-    {"mkNNIndxCB",      (DL_FUNC) &mkNNIndxCB,       7},
-    {"mkUIndx",         (DL_FUNC) &mkUIndx,          8},
-    {"PGLogit",         (DL_FUNC) &PGLogit,          9},
     {"rNNGP",           (DL_FUNC) &rNNGP,           28},
     {"rNNGPPredict",    (DL_FUNC) &rNNGPPredict,    17},
     {"rNNGPReplicated", (DL_FUNC) &rNNGPReplicated, 14},

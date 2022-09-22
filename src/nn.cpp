@@ -18,7 +18,7 @@
 ///////////////////////////////////////////////////////////////////
 //u index 
 ///////////////////////////////////////////////////////////////////
-SEXP mkUIndx(SEXP n_r, SEXP m_r, SEXP nnIndx_r, SEXP uIndx_r, SEXP uIndxLU_r, SEXP uiIndx_r, SEXP nnIndxLU_r, SEXP searchType_r){
+SEXP C_mkUIndx(SEXP n_r, SEXP m_r, SEXP nnIndx_r, SEXP uIndx_r, SEXP uIndxLU_r, SEXP uiIndx_r, SEXP nnIndxLU_r, SEXP searchType_r){
 
   int n = INTEGER(n_r)[0];
   int m = INTEGER(m_r)[0];
@@ -56,7 +56,7 @@ SEXP mkUIndx(SEXP n_r, SEXP m_r, SEXP nnIndx_r, SEXP uIndx_r, SEXP uIndxLU_r, SE
 //Brute force 
 ///////////////////////////////////////////////////////////////////
 
-SEXP mkNNIndx(SEXP n_r, SEXP m_r, SEXP coords_r, SEXP nnIndx_r, SEXP nnDist_r, SEXP nnIndxLU_r, SEXP nThreads_r){
+SEXP C_mkNNIndx(SEXP n_r, SEXP m_r, SEXP coords_r, SEXP nnIndx_r, SEXP nnDist_r, SEXP nnIndxLU_r, SEXP nThreads_r){
   
   int i, j, iNNIndx, iNN;
   double d;
@@ -207,7 +207,7 @@ void fastNN(int m, int n, double *coords, int ui, double *u, int *sIndx, int *rS
 }
 
 extern "C" {
-  SEXP mkNNIndxCB(SEXP n_r, SEXP m_r, SEXP coords_r, SEXP nnIndx_r, SEXP nnDist_r, SEXP nnIndxLU_r, SEXP nThreads_r){
+  SEXP C_mkNNIndxCB(SEXP n_r, SEXP m_r, SEXP coords_r, SEXP nnIndx_r, SEXP nnDist_r, SEXP nnIndxLU_r, SEXP nThreads_r){
     
     int n = INTEGER(n_r)[0];
     int m = INTEGER(m_r)[0];

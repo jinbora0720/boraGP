@@ -16,7 +16,7 @@ mkUIndx <- function(n, m, nn.indx, nn.indx.lu, search.type){
     
     ptm <- proc.time()
     
-    out <- .Call("mkUIndx", n, m, nn.indx, u.indx, u.indx.lu, ui.indx, nn.indx.lu, search.type)
+    out <- .Call("C_mkUIndx", n, m, nn.indx, u.indx, u.indx.lu, ui.indx, nn.indx.lu, search.type)
     
     run.time <- proc.time() - ptm
     
@@ -42,7 +42,7 @@ mkNNIndx <- function(coords, m, n.omp.threads=1){
     
     ptm <- proc.time()
     
-    out <- .Call("mkNNIndx", n, m, coords, nnIndx, nnDist, nnIndxLU, n.omp.threads)
+    out <- .Call("C_mkNNIndx", n, m, coords, nnIndx, nnDist, nnIndxLU, n.omp.threads)
 
     run.time <- proc.time() - ptm
     
@@ -68,7 +68,7 @@ mkNNIndxCB <- function(coords, m, n.omp.threads=1){
 
     ptm <- proc.time()
     
-    out <- .Call("mkNNIndxCB", n, m, coords, nnIndx, nnDist, nnIndxLU, n.omp.threads)
+    out <- .Call("C_mkNNIndxCB", n, m, coords, nnIndx, nnDist, nnIndxLU, n.omp.threads)
 
     run.time <- proc.time() - ptm
     

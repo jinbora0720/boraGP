@@ -79,7 +79,7 @@ PGLogit <- function(formula, weights = 1, data = parent.frame(), n.samples, n.om
 
     ptm <- proc.time()
     
-    out <- .Call("PGLogit", y, X, p, n, weights, beta.starting, n.samples, n.omp.threads, verbose)
+    out <- .Call("C_PGLogit", y, X, p, n, weights, beta.starting, n.samples, n.omp.threads, verbose)
 
     out$run.time <- proc.time() - ptm
 
