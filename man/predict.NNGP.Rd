@@ -72,10 +72,7 @@
 }
 
 \author{
-  Bora Jin \email{bora.jin@duke.edu}, \cr
-  Andrew O. Finley \email{finleya@msu.edu}, \cr
-  Abhirup Datta \email{abhidatta@jhu.edu}, \cr
-  Sudipto Banerjee \email{sudipto@ucla.edu}
+  Bora Jin \email{bora.jin@duke.edu}
 }
 
 \examples{
