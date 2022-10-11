@@ -28,7 +28,7 @@ univariate Bayesian regression models based on BORA-GP with Gaussian errors.
 Bora Jin \href{mailto:bora.jin@duke.edu}{bora.jin@duke.edu}
 }
 \references{
-Jin, B., Herring, A.H., Dunson, D. (2022). Scalable Gaussian Processes on Physically Constrained Domains. \href{}{arXiv}
+Jin, B., Herring, A.H., Dunson, D. (2022). Spatial predictions on physically constrained domains: Applications to Arctic sea salinity data. \href{https://arxiv.org/abs/2210.03913}{arXiv:2210.03913}
 
 The code heavily depends on Finley, Datta, Banerjee (2022) \href{https://doi.org/10.18637/jss.v103.i05}{doi:10.18637/jss.v103.i05}, Finley, Datta, Cook, Morton, Andersen, and Banerjee (2019) \href{https://doi.org/10.1080/10618600.2018.1537924}{doi:10.1080/10618600.2018.1537924} and Datta, Banerjee, Finley, and Gelfand (2016) \href{https://doi.org/10.1080/01621459.2015.1044091}{doi:10.1080/01621459.2015.1044091}.
 }

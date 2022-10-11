@@ -67,9 +67,10 @@ barrier_neighbor(coords, coords.0 = NULL, ord = NULL,
 
 
 \references{
-  Jin, B., Herring, A.H. and Dunson, D. (2022)
-  Scalable Gaussian Processes on Physically Constrained Domains
-  \doi{arXiv:}.
+  Jin, B., Herring, A.H., Dunson, D. (2022)
+  Spatial predictions on physically constrained domains: 
+  Applications to Arctic sea salinity data. 
+  \href{https://arxiv.org/abs/2210.03913}{arXiv:2210.03913}.
 }
 
 \author{

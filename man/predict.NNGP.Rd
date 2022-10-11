@@ -56,9 +56,10 @@
 }
 
 \references{
-  Jin, B., Herring, A.H. and Dunson, D. (2022)
-  Scalable Gaussian Processes on Physically Constrained Domains
-  \doi{arXiv:}.
+  Jin, B., Herring, A.H., Dunson, D. (2022)
+  Spatial predictions on physically constrained domains: 
+  Applications to Arctic sea salinity data. 
+  \href{https://arxiv.org/abs/2210.03913}{arXiv:2210.03913}.
 
   Datta, A., S. Banerjee, A.O. Finley, and A.E. Gelfand. (2016)
   Hierarchical Nearest-Neighbor Gaussian process models for large
