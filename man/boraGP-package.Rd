@@ -34,5 +34,5 @@ The code heavily depends on Finley, Datta, Banerjee (2022) \href{https://doi.org
 }
 \keyword{ package }
 \seealso{
-\code{\link{rboraGP}}, \code{\link{barrier_neighbor}, \code{\link{spNNGP}}, \code{\link{predict.NNGP}}}
+\code{\link{rboraGP}}, \code{\link{barrier_neighbor}}, \code{\link{spNNGP}}, \code{\link{predict.NNGP}}
 }

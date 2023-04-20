@@ -22,7 +22,7 @@ barrier_neighbor <- function(coords, coords.0 = NULL, ord = NULL,
   # Prepare input #
   #################
   # set the number of cores
-  doParallel::registerDoParallel(cores = cores)
+  registerDoParallel(cores = cores)
   
   # make coords data frame
   coords <- data.frame(coords)

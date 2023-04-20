@@ -139,7 +139,7 @@ create_Ctilde <- function(coords, neighbor.info, sig_sq, phi, nu = NULL,
   # cores: number of cores for parallelization
 
   # set the number of cores
-  doParallel::registerDoParallel(cores = cores)
+  registerDoParallel(cores = cores)
 
   ord <- neighbor.info$ord
   n.indx <- neighbor.info$n.indx

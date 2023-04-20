@@ -2,8 +2,8 @@ useDynLib(boraGP, .registration=TRUE)
 
 export(spNNGP)
 export(spConjNNGP)
-export(PGLogit)
-export(spDiag)
+# export(PGLogit)
+# export(spDiag)
 export(rboraGP)
 export(barrier_neighbor)
 export(Cov_matern)
@@ -22,8 +22,14 @@ S3method("predict", "NNGP")
 S3method("print", "predict.NNGP")
 
 import(Formula, coda, RANN)
-importFrom("stats", "coefficients", "lm", "contrasts", "is.empty.model", "model.matrix", "model.response", "terms", "dnorm", "pnorm", "dbinom", "glm", "rnorm", "var", "rbinom", "fitted", "quantile", "rgamma")
+importFrom("stats", "coefficients", "lm", "contrasts", "is.empty.model", 
+           "model.matrix", "model.response", "terms", "dnorm", "pnorm", 
+           "dbinom", "glm", "rnorm", "var", "rbinom", 
+           "fitted", "quantile", "rgamma", 
+           "dist", "na.omit")
 importFrom("utils", "setTxtProgressBar", "txtProgressBar")
-importFrom("RANN", "nn2")
 importFrom("doParallel", "registerDoParallel")
-importFrom("foreach", "%dopar%")
+importFrom("foreach", "%dopar%", "foreach")
+importFrom("sf", "st_as_sf", "st_bbox", "st_buffer", "st_cast", "st_combine", 
+           "st_intersection", "st_intersects", "st_length")
+importFrom("dplyr", "%>%", "arrange", "group_by", "mutate", "pull", "right_join", "summarize")

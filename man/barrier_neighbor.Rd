@@ -78,6 +78,7 @@ barrier_neighbor(coords, coords.0 = NULL, ord = NULL,
 }
 
 \examples{
+
 }
 
 \keyword{model}
