@@ -1,14 +1,19 @@
+#define USE_FC_LEN_T
 #include <string>
 #include <limits>
+#include "util.h"
+
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 #include <R.h>
 #include <Rmath.h>
 #include <Rinternals.h>
 #include <R_ext/BLAS.h>
 #include <R_ext/Utils.h>
-#include "util.h"
-
-#ifdef _OPENMP
-#include <omp.h>
+#ifndef FCONE
+# define FCONE
 #endif
 
 void zeros(double *a, int n){
@@ -26,8 +31,8 @@ void mvrnorm(double *des, double *mu, double *cholCov, int dim){
   for(i = 0; i < dim; i++){
     des[i] = rnorm(0, 1);
   }
- 
-  F77_NAME(dtrmv)("L", "N", "N", &dim, cholCov, &dim, des, &inc);
+  
+  F77_NAME(dtrmv)("L", "N", "N", &dim, cholCov, &dim, des, &inc FCONE FCONE FCONE);
   F77_NAME(daxpy)(&dim, &one, mu, &inc, des, &inc);
 }
 
@@ -69,10 +74,10 @@ void mkUIndx0(int n, int m, int* nnIndx, int* uIndx, int* uIndxLU){
     for(j = 0, h = 0; j < n; j++){   
       getNNIndx(j, m, iNNIndx, iNN);  
       for(k = 0; k < iNN; k++){      	
-	if(nnIndx[iNNIndx+k] == i){
-	  uIndx[l+h] = j;
-	  h++;
-	}    
+        if(nnIndx[iNNIndx+k] == i){
+          uIndx[l+h] = j;
+          h++;
+        }    
       }
     }
     l += h;
@@ -90,10 +95,10 @@ void mkUIndx1(int n, int m, int* nnIndx, int* uIndx, int* uIndxLU){
     for(j = n-1, h = 0; j > i; j--){   
       getNNIndx(j, m, iNNIndx, iNN);  
       for(k = 0; k < iNN; k++){      	
-	if(nnIndx[iNNIndx+k] == i){
-	  uIndx[l+h] = j;
-	  h++;
-	}    
+        if(nnIndx[iNNIndx+k] == i){
+          uIndx[l+h] = j;
+          h++;
+        }    
       }
     }
     l += h;
@@ -104,7 +109,7 @@ void mkUIndx1(int n, int m, int* nnIndx, int* uIndx, int* uIndxLU){
 
 
 void mkUIndx2(int n, int m, int* nnIndx, int *nnIndxLU, int* uIndx, int* uIndxLU){ 
-
+  
   int i, j, k;
   int nIndx = static_cast<int>(static_cast<double>(1+m)/2*m+(n-m-1)*m);
   
@@ -112,7 +117,7 @@ void mkUIndx2(int n, int m, int* nnIndx, int *nnIndxLU, int* uIndx, int* uIndxLU
   int *i_nnIndx = new int[n+1];
   //int *j_A_csc = new int[nIndx];//uIndx
   int *i_A_csc = new int[n+1];
-
+  
   for(i = 0, k = 0; i < n; i++){
     if(nnIndxLU[n+i] == 0){//excludes rows with no elements, i.e., the first row because it is zero by design A[0,0] = 0
       i_nnIndx[0] = 0;
@@ -122,7 +127,7 @@ void mkUIndx2(int n, int m, int* nnIndx, int *nnIndxLU, int* uIndx, int* uIndxLU
     k++;
   }
   i_nnIndx[n] = i_nnIndx[0]+nIndx;
-    
+  
   crs_csc(n, i_nnIndx, nnIndx, i_A_csc, uIndx);
   
   for(i = 0; i < n; i++){
@@ -137,11 +142,11 @@ void mkUIndx2(int n, int m, int* nnIndx, int *nnIndxLU, int* uIndx, int* uIndxLU
 
 
 void crs_csc(int n, int *i_A, int *j_A, int *i_B, int *j_B){
-
+  
   int i, j, col, cumsum, temp, row, dest, last;
   
   int nnz = i_A[n];
-
+  
   for(i = 0; i < n; i++){
     i_B[i] = 0;
   }
@@ -181,7 +186,7 @@ void crs_csc(int n, int *i_A, int *j_A, int *i_B, int *j_B){
 
 
 std::string getCorName(int i){
-
+  
   if(i == 0){
     return "exponential";
   }else if(i == 1){
@@ -197,7 +202,7 @@ std::string getCorName(int i){
 }
 
 double spCor(double &D, double &phi, double &nu, int &covModel, double *bk){
-
+  
   //0 exponential
   //1 spherical
   //2 matern
@@ -229,7 +234,7 @@ double spCor(double &D, double &phi, double &nu, int &covModel, double *bk){
   }else if(covModel == 3){//gaussian
     
     return exp(-1.0*(pow(phi*D,2)));
-      
+    
   }else{
     error("c++ error: cov.model is not correctly specified");
   }
@@ -243,7 +248,7 @@ int which(int a, int *b, int n){
       return(i);
     }
   }
-
+  
   error("c++ error: which failed");
   return -9999;
 }
@@ -272,9 +277,9 @@ double Q(double *B, double *F, double *u, double *v, int n, int *nnIndx, int *nn
 
 
 void printMtrx(double *m, int nRow, int nCol){
-
+  
   int i, j;
-
+  
   for(i = 0; i < nRow; i++){
     Rprintf("\t");
     for(j = 0; j < nCol; j++){
@@ -286,9 +291,9 @@ void printMtrx(double *m, int nRow, int nCol){
 
 
 void printMtrxInt(int *m, int nRow, int nCol){
-
+  
   int i, j;
-
+  
   for(i = 0; i < nRow; i++){
     Rprintf("\t");
     for(j = 0; j < nCol; j++){
@@ -296,5 +301,5 @@ void printMtrxInt(int *m, int nRow, int nCol){
     }
     Rprintf("\n");
   }
-
+  
 }
