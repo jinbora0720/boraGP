@@ -1,4 +1,5 @@
 #include <RcppArmadillo.h>
+// [[Rcpp::depends(RcppArmadillo)]]
 #include <R.h>
 //#include "cov_matern.h"
 
