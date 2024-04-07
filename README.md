@@ -1,6 +1,6 @@
 # boraGP: Barrier Overlap-Removal Acyclic Directed Graph Gaussian Process 
 
-This is an R package under development for the [manuscript](https://arxiv.org/abs/2210.03913) availale on arXiv. 
+This is an R package under development for the [paper](http://dx.doi.org/10.1214/23-AOAS1850) at Annals of Applied Statistics. 
 You can install this package using the following code 
 ```
 devtools::install_github("jinbora0720/boraGP")
